@@ -1,6 +1,6 @@
 # spacemanatee
 
-Manatees are now in space.
+Manatees are now in space!
 ## Team
 
 - Product Owner: Travis Neufeld
