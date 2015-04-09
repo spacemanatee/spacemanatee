@@ -1,5 +1,9 @@
-# Project Name #
+# Space Manatee #
 
+Working Titles:  
+  "Manatee Road"
+  "Road Trip Advisor"
+  
 <!-- 
 > This material was originally posted [here](http://www.quora.com/What-is-Amazons-approach-to-product-development-and-product-management). It is reproduced here for posterities sake.
 
@@ -17,28 +21,37 @@ Once the project moves into development, the press release can be used as a touc
  -->
  
 ## Heading ##
-  > Name the product in a way the reader (i.e. your target customers) will understand.
+  > Discover your adventure, along the journey. 
+  
 
-## Sub-Heading ##
-  > Describe who the market for the product is and what benefit they get. One sentence only underneath the title.
+## Sub-Heading)) ##
+  > A recommendation engine for people seeking adventure along the open road. 
+  
+(Describe who the market for the product is and what benefit they get. One sentence only underneath the title.)
+
 
 ## Summary ##
-  > Give a summary of the product and the benefit. Assume the reader will not read anything else so make this paragraph good.
+  > A web app that recommends the best places to eat, drink, sleep and play, along your road trip.
+  
+  (Give a summary of the product and the benefit. Assume the reader will not read anything else so make this paragraph good.)
 
 ## Problem ##
-  > Describe the problem your product solves.
+  > Long roadtrips are boring, and it's a hassle to find things to do.
+  
+(Describe the problem your product solves.)
 
 ## Solution ##
-  > Describe how your product elegantly solves the problem.
+  > Our app provides you with the top 10 things to do on your road trip.
 
 ## Quote from You ##
-  > A quote from a spokesperson in your company.
+  > "There's so much more to discover..."
 
 ## How to Get Started ##
-  > Describe how easy it is to get started.
+  > Enter your destination, and let SPACE MANATEE do the rest.
 
 ## Customer Quote ##
-  > Provide a quote from a hypothetical customer that describes how they experienced the benefit.
+  > "You made the trip with my five kids bareable! ~Haggared Dad"
 
 ## Closing and Call to Action ##
-  > Wrap it up and give pointers where the reader should go next.
+  > Make the journey as good as the destination with SPACE MANATEE.
+ 
