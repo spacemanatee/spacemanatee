@@ -1,0 +1,15 @@
+{
+  "name": "spacemanatee",
+  "version": "0.0.1",
+  "description": "Greenfield Project",
+  "main": "",
+  "repository": "",
+  "license": "Proprietary",
+  "private": true,
+  "scripts": {
+    "start": "",
+    "test": ""
+  },
+  "dependencies": {
+  }
+}
