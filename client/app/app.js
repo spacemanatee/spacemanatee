@@ -4,11 +4,9 @@ angular.module('app', [])
 
   $scope.submit = function(city) {
 
-      console.log("SCOPE LOCATION: ", $scope.city);
+    console.log("SCOPE ENTIRE: ", $scope.location);
+    Maps.getDirections($scope.location);
 
-      Maps.getCity($scope.city);
-
-    }
   };
 
 })
