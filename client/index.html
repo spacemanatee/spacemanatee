@@ -24,22 +24,32 @@
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?&libraries=places"></script>
 
     <script type="text/javascript">
+
+      var map;
+      var directionsDisplay;
+
       function initialize() {
+
         var mapOptions = {
           center: { lat: 37.82, lng: -122.30},
           zoom: 10,
           disableDefaultUI:true
         };
-        var map = new google.maps.Map(document.getElementById('map-canvas'),
+
+        map = new google.maps.Map(document.getElementById('map-canvas'),
             mapOptions);
 
-      var input1 = document.getElementById('start');
-      var input2 = document.getElementById('end');
+        var input1 = document.getElementById('start');
+        var input2 = document.getElementById('end');
 
-      var autocomplete1 = new google.maps.places.Autocomplete(input1, null);
-      var autocomplete2 = new google.maps.places.Autocomplete(input2, null);
+        var autocomplete1 = new google.maps.places.Autocomplete(input1, null);
+        var autocomplete2 = new google.maps.places.Autocomplete(input2, null);
 
+        directionsDisplay = new google.maps.DirectionsRenderer();
+
+        directionsDisplay.setMap(map);
       }
+
       google.maps.event.addDomListener(window, 'load', initialize);
 
     </script>
