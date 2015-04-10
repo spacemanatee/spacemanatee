@@ -1,4 +1,4 @@
-angular.module('app', [])
+angular.module('app', ['autofill-directive', 'ngRoute'])
 
 .controller('mapCtrl', function($scope, Maps) {
 
