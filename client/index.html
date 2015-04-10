@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" ng-app='app' ng-controller="mapCtrl">
   <head>
-    <title>Space Manatee</title>
-    <h1>Space Manatee</h1>
-    <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="styles/style.css" />
-    <h1></h1>
+    <meta charset="UTF-8">
+    <title>Space Manatee</title>
+    <h1 id="title">Space Manatee</h1>
+
 
     <div id='journey'>
       <form name="submitForm" ng-submit='submit()'>
-        <input type='text' class="submissionfield" id="start" placeholder"Starting location..." ng-model='location.start'>
-        <input type="text" class="submissionfield" id="end" placeholder="here are you going?" ng-model='location.end'>
+        <input type='text' class="submissionfield" id="start" placeholder="Starting location..." ng-model='location.start'>
+        <input type="text" class="submissionfield" id="end" placeholder="Where are you going?" ng-model='location.end'>
+        <br><br>
         <button>Let's Go!</button>
       </form>
     </div>
@@ -20,7 +21,7 @@
       html, body, #map-canvas { height: 100%; margin: 0; padding: 0;}
     </style> -->
 
-    <script type="text/javascript" src="https://maps.googleapis.om/maps/api/js?&libraries=places"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?&libraries=places"></script>
 
     <script type="text/javascript">
       function initialize() {
@@ -29,7 +30,7 @@
           zoom: 10,
           // disableDefaultUI:true
         };
-        var map = new google.maps.Map(document.getElementById('map-canva'),
+        var map = new google.maps.Map(document.getElementById('map-canvas'),
             mapOptions);
         console.log("MAP: ", map);
 
