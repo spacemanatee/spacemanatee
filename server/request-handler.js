@@ -2,7 +2,6 @@ var request = require('request');
 var yelp = require('./yelp');
 var key = require('./api/api_key');
 
-
 var yelpClient = yelp.createClient({
   consumer_key: key.consumer_key,
   consumer_secret: key.consumer_secret,
@@ -10,8 +9,6 @@ var yelpClient = yelp.createClient({
   token_secret:  key.token_secret,
   ssl: key.ssl
 });
-
-
 
 var locationArray=[
   ["37.7880, -122.3997"], // SF
@@ -40,44 +37,33 @@ var filterYelp = function (){};
 
 var searchYelp = function (req, res, callback) {
   var counter = 0;
-  for (var i=0; i< locationArray.length; i++) { 
+  for (var i=0; i< locationArray.length; i++) {
     (function(i){
       yelpClient.search({term: yelpProperty.term, limit: yelpProperty.limit,
        sort: yelpProperty.sort, radius_filter:yelpProperty.radius_filter, ll: locationArray[i]},
        function(error, data) {
         for (var j = 0; j < data['businesses'].length; j++) {
-         console.log(data['businesses'][j]['name']);
         }
       testCollection[i]=[data];
-      console.log('!!!!!!done for this location');
       counter++;
       if (counter === locationArray.length) {
         callback();
-      } 
+      }
      });
     })(i);
-  } 
+  }
 }
 
 var performSearch = function(req, res) {
-  console.log('in side request handler');
-  
+
   // first call google map api to get the longitude and latitude arrays along the path
   // store the path (longitude and latitude) in array (locationArray);
 
-  // 
   searchYelp(req, res, function() {
     res.end(JSON.stringify(testCollection));
     testCollection = [];
   });
 }
-
-
-  
-
-
-
-
 
 exports.performSearch = performSearch;
 
