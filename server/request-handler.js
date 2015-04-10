@@ -2,7 +2,7 @@ var request = require('request');
 var yelp = require('./yelp');
 var key = require('./api/api_key');
 
-
+// create yelp client using Oauth
 var yelpClient = yelp.createClient({
   consumer_key: key.consumer_key,
   consumer_secret: key.consumer_secret,
@@ -12,9 +12,9 @@ var yelpClient = yelp.createClient({
 });
 
 
-
-var locationArray=[
-  ["37.7880, -122.3997"], // SF
+// dummy testing waypoint array to test the functionality of searchYelp
+var locations = [
+  ['37.7880, -122.3997'], // SF
   ['37.7833, -122.4167'], // South SF
   ['37.4292, -122.1381'], // Palo Alto
   ['37.3544, -121.9692'], // Santa Clara
@@ -26,58 +26,47 @@ var locationArray=[
   ['32.7150, -117.1625'] // San Diego
 ];
 
-var yelpProperty ={
+// yelp search parameter configuration
+var yelpProperty = {
   term: "food", // searching food
   limit: 10, // limit only 10 entry
   sort: 2, // sort by "calibrated" rating
   radius_filter: 1609.34 // within 1 miles, or 1609.3 meters radius
-  //ll: '', // latitude, longitude
 };
 
-var testCollection=[];
+// data collected from yelp search
+var yelpresults = [];
 
+// function to filter the top choices from yelp
 var filterYelp = function (){};
 
+// function to use yelp API to get the top choices based on longitude and latitude
 var searchYelp = function (req, res, callback) {
   var counter = 0;
-  for (var i=0; i< locationArray.length; i++) { 
-    (function(i){
+  for(var i = 0; i < locations.length; i++){ 
+    (function(i) {
       yelpClient.search({term: yelpProperty.term, limit: yelpProperty.limit,
-       sort: yelpProperty.sort, radius_filter:yelpProperty.radius_filter, ll: locationArray[i]},
-       function(error, data) {
-        for (var j = 0; j < data['businesses'].length; j++) {
-         console.log(data['businesses'][j]['name']);
-        }
-      testCollection[i]=[data];
-      console.log('!!!!!!done for this location');
-      counter++;
-      if (counter === locationArray.length) {
-        callback();
-      } 
+      sort: yelpProperty.sort, radius_filter:yelpProperty.radius_filter, ll: locationArray[i]},
+      function(error, data) {
+        yelpresults[i] = data;
+        counter++;
+        if(counter === locationArray.length){
+          callback();
+        } 
      });
     })(i);
   } 
 }
 
+// function to perform the search 
 var performSearch = function(req, res) {
-  console.log('in side request handler');
-  
-  // first call google map api to get the longitude and latitude arrays along the path
-  // store the path (longitude and latitude) in array (locationArray);
-
-  // 
+  // first filter the google waypoints
+  // store the path (longitude and latitude) in array (locations);
   searchYelp(req, res, function() {
-    res.end(JSON.stringify(testCollection));
+    res.end(JSON.stringify(yelpresults));
     testCollection = [];
   });
 }
-
-
-  
-
-
-
-
 
 exports.performSearch = performSearch;
 
