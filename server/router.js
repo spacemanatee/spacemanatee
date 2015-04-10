@@ -16,8 +16,8 @@ console.log('in router!');
 router.post('/search', function(req, res) {
   console.log('now searching google API and then Yelp');
   // call request-handler to perform the work
-  //requestHandler.performSearch(req, res);
-  res.end();
+  requestHandler.performSearch(req, res);
+  //res.end();
   
 });
 
@@ -25,8 +25,8 @@ router.post('/search', function(req, res) {
 
 router.get('/search', function(req, res) {
   console.log('now searching google API and then Yelp');
-  //requestHandler.performSearch(req, res);
-  res.end();
+  requestHandler.performSearch(req, res);
+  //res.end();
 });
 
 
