@@ -46,17 +46,17 @@ var searchYelp = function (req, res, callback) {
   for(var i = 0; i < locations.length; i++){ 
     (function(i) {
       yelpClient.search({term: yelpProperty.term, limit: yelpProperty.limit,
-      sort: yelpProperty.sort, radius_filter:yelpProperty.radius_filter, ll: locationArray[i]},
+      sort: yelpProperty.sort, radius_filter:yelpProperty.radius_filter, ll: locations[i]},
       function(error, data) {
         yelpresults[i] = data;
         counter++;
-        if(counter === locationArray.length){
+        if(counter === locations.length){
           callback();
         } 
      });
     })(i);
   } 
-}
+};
 
 // function to perform the search 
 var performSearch = function(req, res) {
@@ -64,9 +64,9 @@ var performSearch = function(req, res) {
   // store the path (longitude and latitude) in array (locations);
   searchYelp(req, res, function() {
     res.end(JSON.stringify(yelpresults));
-    testCollection = [];
+    yelpresults = [];
   });
-}
+};
 
 exports.performSearch = performSearch;
 
