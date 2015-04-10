@@ -4,10 +4,40 @@ angular.module('app', ['autofill-directive', 'ngRoute'])
 
   $scope.submit = function(city) {
 
+    function codeAddress() {
+      var geocoder = new google.maps.Geocoder();
 
-// Maps.sendPost({start: 'street', end: 'otherStreet'});
-    console.log("SCOPE ENTIRE: ", $scope.location);
-    Maps.getDirections($scope.location);
+    //  var addressStart = $scope.location.start;
+
+      geocoder.geocode( { 'address': $scope.location.start}, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+          // map.setCenter(results[0].geometry.location);
+          // var marker = new google.maps.Marker({
+          //     map: map,
+          //     position: results[0].geometry.location
+          // });
+          console.log("START LAT: ", results[0].geometry.location.k);
+          console.log("START LNG: ", results[0].geometry.location.D);
+        } else {
+          alert("Geocode was not successful for the following reason: " + status);
+        }
+      });
+
+      geocoder.geocode( { 'address': $scope.location.end}, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+          console.log("END LAT: ", results[0].geometry.location.k);
+          console.log("END LNG: ", results[0].geometry.location.D);
+        } else {
+          alert("Geocode was not successful for the following reason: " + status);
+        }
+      });
+
+    }
+
+    codeAddress();
+ // Maps.sendPost({start: 'street', end: 'otherStreet'});
+ //    console.log("SCOPE ENTIRE: ", $scope.location);
+ //    Maps.getDirections($scope.location);
 
   };
 
