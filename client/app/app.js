@@ -1,16 +1,15 @@
-angular.module('app', [])
+angular.module('app', ['autofill-directive', 'ngRoute'])
 
 .controller('mapCtrl', function($scope, Maps) {
 
   $scope.submit = function(city) {
 
-      //console.log("SCOPE LOCATION: ", $scope.city);
 
-      //Maps.getCity($scope.city);
+// Maps.sendPost({start: 'street', end: 'otherStreet'});
+    console.log("SCOPE ENTIRE: ", $scope.location);
+    Maps.getDirections($scope.location);
 
-      Maps.sendPost({start: 'street', end: 'otherStreet'});
-    }
-
+  };
 
 })
 
