@@ -106,6 +106,7 @@ angular.module('app', ['autofill-directive', 'ngRoute'])
   };
 
   var sendPost = function(routeObject){
+    console.log('In sendPost');
     $http.post('/search', routeObject)
       .then(function(response, error){
         //POST request successfully sent and response code was returned
