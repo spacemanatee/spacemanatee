@@ -12,6 +12,7 @@ app.use('/', express.static(__dirname + '/client'));
 //parses all incoming data from strings to JSON
 app.use(bodyParser.json());
 
+//Send all calls to router function
 app.use(router);
 
 app.listen(port, function() {
