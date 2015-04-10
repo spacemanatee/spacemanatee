@@ -69,7 +69,9 @@ angular.module('app', ['autofill-directive', 'ngRoute'])
           console.log(response.routes[0].overview_path);
 
           for (var i = 0; i < 20; i++) {
+
             var random = Math.floor(Math.random() * response.routes[0].overview_path.length);
+
             var marker = new google.maps.Marker({
                map: map,
                position: response.routes[0].overview_path[random],
@@ -78,13 +80,14 @@ angular.module('app', ['autofill-directive', 'ngRoute'])
 
           }
 
-          var locations = {
-            start: startGeo,
-            end: endGeo
-          };
+          var waypoints = {};
 
-          console.log("LOCATIONS: ", locations);
-          Maps.sendPost(locations);
+          for (var j = 0; j < response.routes[0].overview_path.length; j++) {
+            waypoints[j] = response.routes[0].overview_path[j].k + "," + response.routes[0].overview_path[j].D;
+          }
+
+          console.log("WAYPOINTS: ", waypoints);
+          Maps.sendPost(waypoints);
 
         } else {
           console.log("Geocode was not successful: " + status);
