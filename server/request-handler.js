@@ -41,16 +41,25 @@ var yelpresults = [];
 var filterYelp = function (){};
 
 // function to use yelp API to get the top choices based on longitude and latitude
-var searchYelp = function (req, res, callback) {
+var searchYelp = function (req, res, googleCoords, callback) {
   var counter = 0;
-  for(var i = 0; i < locations.length; i++){ 
+  console.log(googleCoords);
+  for(var i = 0; i < googleCoords.length; i++){ 
     (function(i) {
-      yelpClient.search({term: yelpProperty.term, limit: yelpProperty.limit,
-      sort: yelpProperty.sort, radius_filter:yelpProperty.radius_filter, ll: locations[i]},
-      function(error, data) {
+      yelpClient.search({
+        term: yelpProperty.term, 
+        limit: yelpProperty.limit,
+        sort: yelpProperty.sort, 
+        radius_filter:yelpProperty.radius_filter, 
+        ll: googleCoords[i]
+      }, function(error, data) {
+        if (error) {
+          console.log(error);
+        }
         yelpresults[i] = data;
         counter++;
-        if(counter === locations.length){
+        if(counter === googleCoords.length){
+          console.log(yelpresults);
           callback();
         } 
      });
@@ -59,10 +68,10 @@ var searchYelp = function (req, res, callback) {
 };
 
 // function to perform the search 
-var performSearch = function(req, res) {
+var performSearch = function(req, res, googleCoords) {
   // first filter the google waypoints
   // store the path (longitude and latitude) in array (locations);
-  searchYelp(req, res, function() {
+  searchYelp(req, res, googleCoords, function() {
     res.end(JSON.stringify(yelpresults));
     yelpresults = [];
   });
