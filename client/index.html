@@ -27,6 +27,8 @@
 
       var map;
       var directionsDisplay;
+      var markerArray = [];
+      var stepDisplay;
 
       function initialize() {
 
@@ -46,6 +48,7 @@
         var autocomplete2 = new google.maps.places.Autocomplete(input2, null);
 
         directionsDisplay = new google.maps.DirectionsRenderer();
+        stepDisplay = new google.maps.InfoWindow();
 
         directionsDisplay.setMap(map);
       }

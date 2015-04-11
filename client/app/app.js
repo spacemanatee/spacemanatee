@@ -11,6 +11,10 @@ angular.module('app', ['autofill-directive', 'ngRoute'])
       //New directionsService object to interact with google maps API
       var directionsService = new google.maps.DirectionsService();
 
+      for (var i = 0; i < markerArray.length; i++) {
+        markerArray[i].setMap(null);
+      }
+
       var request = {
         //origin and destination are obtained from form on index.html
         origin: $scope.location.start,
@@ -36,6 +40,8 @@ angular.module('app', ['autofill-directive', 'ngRoute'])
                position: response.routes[0].overview_path[random],
                animation: google.maps.Animation.DROP
             });
+            attachInstructionText(marker, 'hello, world');
+            markerArray[i] = marker;
           }
 
           var waypoints = {};
@@ -53,6 +59,15 @@ angular.module('app', ['autofill-directive', 'ngRoute'])
           //Log the status code on error
           console.log("Geocode was not successful: " + status);
         }
+      });
+    }
+
+    function attachInstructionText(marker, text) {
+      google.maps.event.addListener(marker, 'click', function() {
+        // Open an info window when the marker is clicked on,
+        // containing the text of the step.
+        stepDisplay.setContent(text);
+        stepDisplay.open(map, marker);
       });
     }
   };
