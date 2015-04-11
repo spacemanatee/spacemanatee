@@ -58,12 +58,34 @@ var searchYelp = function (req, res, callback) {
   } 
 };
 
+var createTopResultsJSON = function(yelpresults) {
+  var topResults = [];
+
+  var index = 0;
+  var length = yelpresults[0]['businesses'].length || 0;
+  while(index<10 && index<length) {
+    console.log(yelpresults[0]['businesses'][index]);
+    var name = yelpresults[0]['businesses'][index]['name'];
+    console.log(index + ". " + name);
+    topResults.push(yelpresults[0]['businesses'][index]);
+    index++;
+  }
+
+  // STILL NEEDS ADDITIONAL FILTERS, EX:
+  // IF ( rating >= 4 && review_count > 50 ) 
+  // More changes to come... ~Paul
+  
+
+  return topResults;
+}
+
 // function to perform the search 
 var performSearch = function(req, res) {
   // first filter the google waypoints
   // store the path (longitude and latitude) in array (locations);
   searchYelp(req, res, function() {
-    res.end(JSON.stringify(yelpresults));
+    var topResults = createTopResultsJSON(yelpresults);
+    res.end(JSON.stringify(topResults));
     yelpresults = [];
   });
 };
