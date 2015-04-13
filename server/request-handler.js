@@ -29,7 +29,7 @@ var locations = [
 // yelp search parameter configuration
 var yelpProperty = {
   term: "food", // searching food
-  limit: 10, // limit only 10 entry
+  limit: 20, // limit only 20 entry
   sort: 2, // sort by "calibrated" rating
   radius_filter: 1609.34 // within 1 miles, or 1609.3 meters radius
 };
@@ -62,19 +62,25 @@ var createTopResultsJSON = function(yelpresults) {
   var topResults = [];
 
   var index = 0;
-  var length = yelpresults[0]['businesses'].length || 0;
-  while(index<10 && index<length) {
-    console.log(yelpresults[0]['businesses'][index]);
+  var length = yelpProperty.limit || 0;
+  var idealLength = 10;
+  while(index<idealLength && index<length) {
     var name = yelpresults[0]['businesses'][index]['name'];
-    console.log(index + ". " + name);
+    var address = yelpresults[0]['businesses'][index]['location']['display_address'];
+    var rating = yelpresults[0]['businesses'][index]['rating'];
+    var review_count = yelpresults[0]['businesses'][index]['review_count'];
+    
+    //console.log("INDEX " + index, yelpresults[0]['businesses'][index]);    
+    //console.log(">>> " + name + ": ", address);
+    //console.log("--> rating: " + rating + "  review_count: " + review_count);
+
+    // STILL NEEDS ADDITIONAL FILTERS, EX:
+    // IF ( rating >= 4 && review_count > 50 ) 
+    // More changes to come... ~Paul
+    
     topResults.push(yelpresults[0]['businesses'][index]);
     index++;
   }
-
-  // STILL NEEDS ADDITIONAL FILTERS, EX:
-  // IF ( rating >= 4 && review_count > 50 ) 
-  // More changes to come... ~Paul
-  
 
   return topResults;
 }
@@ -87,6 +93,7 @@ var performSearch = function(req, res) {
     var topResults = createTopResultsJSON(yelpresults);
     res.end(JSON.stringify(topResults));
     yelpresults = [];
+    return topResults;
   });
 };
 

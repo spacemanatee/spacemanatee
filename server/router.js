@@ -4,9 +4,7 @@ var router = express.Router();
 
 router.post('/search', function(req, res) {
   console.log('(POST "/search") Now searching the Yelp API...');
-  // call request-handler to perform the work
-  requestHandler.performSearch(req, res);
-  //res.end();
+  res.end(requestHandler.performSearch(req, res));
 });
 
 router.get('/search', function(req, res) {
