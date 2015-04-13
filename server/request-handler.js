@@ -11,40 +11,25 @@ var yelpClient = yelp.createClient({
   ssl: key.ssl
 });
 
-
-// dummy testing waypoint array to test the functionality of searchYelp
-var locations = [
-  ['37.7880, -122.3997'], // SF
-  ['37.7833, -122.4167'], // South SF
-  ['37.4292, -122.1381'], // Palo Alto
-  ['37.3544, -121.9692'], // Santa Clara
-  ['36.9719, -122.0264'], // Santa Cruz
-  ['34.4258, -119.7142'], // Santa Barbara,
-  ['34.0500, -118.2500'], // Los Angeles
-  ['34.0219, -118.4814'], // Santa Monica,
-  ['33.6694, -117.8231'], // Irvine
-  ['32.7150, -117.1625'] // San Diego
-];
-
 // yelp search parameter configuration
 var yelpProperty = {
-  term: "food", // searching food
-  limit: 20, // limit only 20 entry
-  sort: 2, // sort by "calibrated" rating
-  radius_filter: 1609.34 // within 1 miles, or 1609.3 meters radius
+  term: "food",           // Type of business (food, restaurants, bars, hotels, etc.)
+  limit: 20,              // Number of entries returned from each call
+  sort: 2,                // Sort mode: 0=Best matched (default), 1=Distance, 2=Highest Rated
+  radius_filter: 1609.34  // Search radius: 1 mile = 1609.3 meters
 };
-
-// data collected from yelp search
-var yelpresults = [];
-
-// function to filter the top choices from yelp
-var filterYelp = function (){};
 
 // function to use yelp API to get the top choices based on longitude and latitude
 var searchYelp = function (req, res, googleCoords, callback) {
+  //Counter variable which will keep track of how many Yelp calls have completed
+  //A separate counter is needed due to the asynchronous nature of web requests
   var counter = 0;
-  console.log(googleCoords);
+  // Array that stores all of the Yelp results from all calls to Yelp
+  var yelpResults = [];
+
+  //Request yelp for each point along route that is returned by filterGoogle.js
   for(var i = 0; i < googleCoords.length; i++){
+    //yelpClient.search is asynchronous and so we must use a closure scope to maintain the value of i
     (function(i) {
       yelpClient.search({
         term: yelpProperty.term,
@@ -56,30 +41,32 @@ var searchYelp = function (req, res, googleCoords, callback) {
         if (error) {
           console.log(error);
         }
-        yelpresults[i] = data;
+        //Push the data returned from Yelp into yelpResults array
+        yelpResults[i] = data;
         counter++;
+        //After all yelp results are received call callback with those results
         if(counter === googleCoords.length){
-          console.log(yelpresults);
-          callback();
+          callback(yelpResults);
         }
      });
     })(i);
   }
 };
 
-var createTopResultsJSON = function(yelpresults) {
+//Filter results returned from Yelp into an overall top 10
+var createTopResultsJSON = function(yelpResults) {
   var topResults = [];
-
   var index = 0;
   var length = yelpProperty.limit || 0;
   var idealLength = 10;
-  while(index<idealLength && index<length) {
-    var name = yelpresults[0]['businesses'][index]['name'];
-    var address = yelpresults[0]['businesses'][index]['location']['display_address'];
-    var rating = yelpresults[0]['businesses'][index]['rating'];
-    var review_count = yelpresults[0]['businesses'][index]['review_count'];
 
-    //console.log("INDEX " + index, yelpresults[0]['businesses'][index]);
+  while(index < idealLength && index < length) {
+    var name = yelpResults[0]['businesses'][index]['name'];
+    var address = yelpResults[0]['businesses'][index]['location']['display_address'];
+    var rating = yelpResults[0]['businesses'][index]['rating'];
+    var review_count = yelpResults[0]['businesses'][index]['review_count'];
+
+    //console.log("INDEX " + index, yelpResults[0]['businesses'][index]);
     //console.log(">>> " + name + ": ", address);
     //console.log("--> rating: " + rating + "  review_count: " + review_count);
 
@@ -87,22 +74,26 @@ var createTopResultsJSON = function(yelpresults) {
 
     // IF ( rating >= 4 && review_count > 50 )
     // More changes to come...   ~Paul
-    topResults.push(yelpresults[0]['businesses'][index]);
+    topResults.push(yelpResults[0]['businesses'][index]);
     index++;
   }
+  console.log("topResults: ", topResults);
 
-  return topResults;
+  var result = {
+    results: topResults
+  };
+
+  return result;
 }
 
 // function to perform the search
-var performSearch = function(req, res) {
+var performSearch = function(req, res, googleCoords) {
   // first filter the google waypoints
   // store the path (longitude and latitude) in array (locations);
-  searchYelp(req, res, function() {
-    var topResults = createTopResultsJSON(yelpresults);
+  searchYelp(req, res, googleCoords, function(yelpResults) {
+    var topResults = createTopResultsJSON(yelpResults);
+    console.log(topResults);
     res.end(JSON.stringify(topResults));
-    yelpresults = [];
-    return topResults;
   });
 };
 

@@ -6,10 +6,10 @@ var router = express.Router();
 router.post('/search', function(req, res) {
   console.log('(POST "/search") Now searching the Yelp API...');
   // call request-handler to perform the work
-  console.log( typeof filter);
   var googleCoords = filter(req.body);
   console.log(req.body);
-  res.end(requestHandler.performSearch(req, res, googleCoords));
+  requestHandler.performSearch(req, res, googleCoords);
+});
 
 router.post('/*', function(req, res) {
   console.log('POST to unknown page - redirecting to homepage.');
