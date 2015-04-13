@@ -10,6 +10,7 @@ router.post('/search', function(req, res) {
   var googleCoords = filter(req.body);
   console.log(req.body);
   res.end(requestHandler.performSearch(req, res, googleCoords));
+});
 
 router.post('/*', function(req, res) {
   console.log('POST to unknown page - redirecting to homepage.');
