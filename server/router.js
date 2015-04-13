@@ -12,11 +12,6 @@ router.post('/search', function(req, res) {
   requestHandler.performSearch(req, res, googleCoords);
 });
 
-router.get('/search', function(req, res) {
-  console.log('GET "/search" unknown - redirecting to homepage.');
-  res.redirect('/');
-});
-
 router.post('/*', function(req, res) {
   console.log('POST to unknown page - redirecting to homepage.');
   res.redirect('/');
