@@ -84,9 +84,9 @@ var createTopResultsJSON = function(yelpresults) {
     //console.log("--> rating: " + rating + "  review_count: " + review_count);
 
     // STILL NEEDS ADDITIONAL FILTERS, EX:
+
     // IF ( rating >= 4 && review_count > 50 )
     // More changes to come...   ~Paul
-
     topResults.push(yelpresults[0]['businesses'][index]);
     index++;
   }
@@ -95,7 +95,7 @@ var createTopResultsJSON = function(yelpresults) {
 }
 
 // function to perform the search
-var performSearch = function(req, res, googleCoords) {
+var performSearch = function(req, res) {
   // first filter the google waypoints
   // store the path (longitude and latitude) in array (locations);
   searchYelp(req, res, function() {
