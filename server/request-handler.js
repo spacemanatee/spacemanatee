@@ -76,7 +76,7 @@ var createTopResultsJSON = function(yelpresults) {
 
     // STILL NEEDS ADDITIONAL FILTERS, EX:
     // IF ( rating >= 4 && review_count > 50 ) 
-    // More changes to come... ~Paul
+    // More changes to come...   ~Paul
     
     topResults.push(yelpresults[0]['businesses'][index]);
     index++;
