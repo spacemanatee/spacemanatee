@@ -77,7 +77,6 @@ var createTopResultsJSON = function(yelpResults) {
     topResults.push(yelpResults[0]['businesses'][index]);
     index++;
   }
-  console.log("topResults: ", topResults);
 
   var result = {
     results: topResults
@@ -88,11 +87,12 @@ var createTopResultsJSON = function(yelpResults) {
 
 // function to perform the search
 var performSearch = function(req, res, googleCoords) {
-  // first filter the google waypoints
-  // store the path (longitude and latitude) in array (locations);
+  //searchYelp function will query yelp API with the filtered locations from filterGoogle.js
   searchYelp(req, res, googleCoords, function(yelpResults) {
+    //The callback will call createTopResultsJSON which filters all the results into an overall top 10
     var topResults = createTopResultsJSON(yelpResults);
     console.log(topResults);
+    //Return overall top 10 data in the body of the web response
     res.end(JSON.stringify(topResults));
   });
 };
