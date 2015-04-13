@@ -9,7 +9,7 @@ router.post('/search', function(req, res) {
   console.log( typeof filter);
   var googleCoords = filter(req.body);
   console.log(req.body);
-  requestHandler.performSearch(req, res, googleCoords);
+  res.end(requestHandler.performSearch(req, res, googleCoords));
 });
 
 router.post('/*', function(req, res) {
