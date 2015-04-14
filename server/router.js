@@ -7,7 +7,7 @@ router.post('/search', function(req, res) {
   console.log('(POST "/search") Now searching the Yelp API...');
   // call request-handler to perform the work
   var googleCoords = filter(req.body);
-  console.log(req.body);
+  //console.log(req.body);
   requestHandler.performSearch(req, res, googleCoords);
 });
 
