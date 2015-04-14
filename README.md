@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/spacemanatee/spacemanatee.png?label=ready&title=Ready)](https://waffle.io/spacemanatee/spacemanatee)
 # spacemanatee
 
 Manatees are now in space.
