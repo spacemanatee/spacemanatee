@@ -32,16 +32,20 @@ angular.module('app', ['autofill-directive', 'ngRoute'])
           console.log("LENGTH: ", response.routes[0].overview_path.length);
           console.log("OVERVIEW PATH: ", response.routes[0].overview_path);
 
-          var waypoints = {};
+          var sendData = {
+            distance: response.routes[0].legs[0].distance,
+            waypoints: {}
+          };
+
           //gather all points along route returned by Google in overview_path property
           //and insert them into waypoints object to send to server
           for (var j = 0; j < response.routes[0].overview_path.length; j++) {
-            waypoints[j] = response.routes[0].overview_path[j].k + "," + response.routes[0].overview_path[j].D;
+            sendData.waypoints[j] = response.routes[0].overview_path[j].k + "," + response.routes[0].overview_path[j].D;
           }
 
-          console.log("WAYPOINTS: ", waypoints);
+          console.log("sendData: ", sendData);
           // Send all waypoints along route to server
-          Maps.sendPost(waypoints)
+          Maps.sendPost(sendData)
           .then(function(res){
             console.log("PROMISE OBJ: ", res.data.results);
             placemarkers(res.data.results);
