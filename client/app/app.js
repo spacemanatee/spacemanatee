@@ -61,7 +61,8 @@ angular.module('app', ['autofill-directive', 'ngRoute'])
               setTimeout(function() {
                 var lat = places[i].location.coordinate.latitude;
                 var lng = places[i].location.coordinate.longitude;
-                var description = places[i].name;
+                var description = renderView(i, places);
+                
                 var marker = new google.maps.Marker({
                   map: map,
                   position: new google.maps.LatLng(lat,lng),
@@ -78,6 +79,19 @@ angular.module('app', ['autofill-directive', 'ngRoute'])
           console.log("Geocode was not successful: " + status);
         }
       });
+    }
+    // this function generate a view to display the restaurant image and link
+    function renderView(i, places){
+      var description = '<div>' +
+          '<h1>' + places[i].name + '</h1>' +
+          '<div>' + '<img src="'+ places[i]["image_url"] +'"/>'
+          +'</div>' +
+          '<div>' + '<img src="'+ places[i]["rating_img_url"] +'"/>'
+          + 'rating: ' +places[i]["rating"] 
+          +'</div>' 
+          +'<a href="'+places[i]["url"] +'" target="_blank"> Visit Yelp</a>'
+          +'</div>';
+      return description;
     }
 
     function attachInstructionText(marker, text) {
