@@ -8,15 +8,15 @@ angular.module('app', ['autofill-directive', 'ngRoute'])
     calcRoute();
 
     function calcRoute() {
-      //New directionsService object to interact with google maps API
+      // New directionsService object to interact with google maps API
       var directionsService = new google.maps.DirectionsService();
-
+      // clear markers whenever new search
       for (var i = 0; i < markerArray.length; i++) {
         markerArray[i].setMap(null);
       }
 
+      // create object to send to Google to generate directions
       var request = {
-        //origin and destination are obtained from form on index.html
         origin: $scope.location.start,
         destination: $scope.location.end,
         travelMode: google.maps.TravelMode.DRIVING
@@ -30,42 +30,44 @@ angular.module('app', ['autofill-directive', 'ngRoute'])
 
           console.log("DIRECTIONS RESPONSE: ", response);
           console.log("LENGTH: ", response.routes[0].overview_path.length);
-          console.log(response.routes[0].overview_path);
+          console.log("OVERVIEW PATH: ", response.routes[0].overview_path);
 
-          //create random markers to place on map for mockup
+          var waypoints = {};
+          //gather all points along route returned by Google in overview_path property
+          //and insert them into waypoints object to send to server
+          for (var j = 0; j < response.routes[0].overview_path.length; j++) {
+            waypoints[j] = response.routes[0].overview_path[j].k + "," + response.routes[0].overview_path[j].D;
+          }
 
-          function placemarkers () {
-            for (var i = 0; i < 20; i++) {
-              setDelay(i);
+          console.log("WAYPOINTS: ", waypoints);
+          // Send all waypoints along route to server
+          Maps.sendPost(waypoints)
+          .then(function(res){
+            console.log("PROMISE OBJ: ", res.data.results);
+            placemarkers(res.data.results);
+            // get back recommendations from Yelp and display as markers
+          })
+
+          function placemarkers (places) {
+            for (var i = 0; i < places.length; i++) {
+               setDelay(i, places);
             }
-
-            function setDelay(i) {
+            // set delay for dropping each marker
+            function setDelay(i, places) {
               setTimeout(function() {
-                var random = Math.floor(Math.random() * response.routes[0].overview_path.length);
+                var lat = places[i].location.coordinate.latitude;
+                var lng = places[i].location.coordinate.longitude;
+                var description = places[i].name;
                 var marker = new google.maps.Marker({
-                   map: map,
-                   title: "Hello World!",
-                   position: response.routes[0].overview_path[random],
-                   animation: google.maps.Animation.DROP
+                  map: map,
+                  position: new google.maps.LatLng(lat,lng),
+                  animation: google.maps.Animation.DROP
                 });
-                attachInstructionText(marker, 'hello, world');
+                attachInstructionText(marker, description);
                 markerArray[i] = marker;
               }, i * 300);
             }
-
-            var waypoints = {};
-            //gather all points along route returned by Google in overview_path property
-            //and insert them into waypoints object to send to server
-            for (var j = 0; j < response.routes[0].overview_path.length; j++) {
-              waypoints[j] = response.routes[0].overview_path[j].k + "," + response.routes[0].overview_path[j].D;
-            }
-
-            console.log("WAYPOINTS: ", waypoints);
-            //Send all waypoints along route to server
-            Maps.sendPost(waypoints);
           }
-
-          placemarkers();
 
         } else {
           //Log the status code on error
@@ -76,26 +78,26 @@ angular.module('app', ['autofill-directive', 'ngRoute'])
 
     function attachInstructionText(marker, text) {
       google.maps.event.addListener(marker, 'click', function() {
-        // Open an info window when the marker is clicked on,
-        // containing the text of the step.
+        // Open an info window when the marker is clicked on
         stepDisplay.setContent(text);
         stepDisplay.open(map, marker);
       });
     }
   };
 })
+
 .factory('Maps', function($http) {
 
   var getDirections = function (target) {};
 
-  //This function sends a POST to the server at route /search with all waypoints along route as data
+  //This function sends a POST to the server at route /csearch with all waypoints along route as data
   var sendPost = function(routeObject){
 
-    $http.post('/search', routeObject)
+    return $http.post('/search', routeObject)
       .then(function(response, error){
         //POST request successfully sent and response code was returned
         console.log('response: ', response);
-        console.log('error: ', error);
+        console.log('if error: ', error);
         return response;
       })
     };
