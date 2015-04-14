@@ -33,7 +33,7 @@ angular.module('app', ['autofill-directive', 'ngRoute'])
           console.log("OVERVIEW PATH: ", response.routes[0].overview_path);
 
           var sendData = {
-            distance: response.routes[0].legs[0].distance,
+            distance: response.routes[0].legs[0].distance.text,
             waypoints: {}
           };
 
