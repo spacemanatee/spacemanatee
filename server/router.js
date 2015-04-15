@@ -7,7 +7,6 @@ router.post('/search', function(req, res) {
   console.log('(POST "/search") Now searching the Yelp API...');
   // call request-handler to perform the work
   var googleCoords = filter(req.body);
-  //console.log(req.body);
   requestHandler.performSearch(req, res, googleCoords);
 });
 
@@ -17,7 +16,6 @@ router.post('/*', function(req, res) {
 });
 
 router.get('/*', function (req, res) {
-  console.log('GET to unknown page - redirecting to homepage.');
   res.redirect('/');
 });
 
