@@ -13,7 +13,7 @@ var yelpClient = yelp.createClient({
 // yelp search parameter configuration
 var yelpProperty = {
   term: "food",           // Type of business (food, restaurants, bars, hotels, etc.)
-  limit: 20,              // Number of entries returned from each call
+  limit: 10,              // Number of entries returned from each call
   sort: 2,                // Sort mode: 0=Best matched (default), 1=Distance, 2=Highest Rated
   radius_filter: 1609.34  // Search radius: 1 mile = 1609.3 meters
 };
@@ -25,7 +25,6 @@ module.exports.searchYelp = function (req, res, googleCoords, callback) {
   var counter = 0;
   // Array that stores all of the Yelp results from all calls to Yelp
   var yelpResults = [];
-
   //Request yelp for each point along route that is returned by filterGoogle.js
   for(var i = 0; i < googleCoords.length; i++){
     //yelpClient.search is asynchronous and so we must use a closure scope to maintain the value of i
@@ -34,7 +33,7 @@ module.exports.searchYelp = function (req, res, googleCoords, callback) {
         term: yelpProperty.term,
         limit: yelpProperty.limit,
         sort: yelpProperty.sort,
-        radius_filter:yelpProperty.radius_filter,
+        radius_filter: yelpProperty.radius_filter,
         ll: googleCoords[i]
       }, function(error, data) {
         if (error) {
@@ -54,29 +53,43 @@ module.exports.searchYelp = function (req, res, googleCoords, callback) {
 
 //Filter results returned from Yelp into an overall top 10
 module.exports.createTopResultsJSON = function(yelpResults) {
+  var allBusinesses = [];
   var topResults = [];
-  var index = 0;
-  var length = yelpProperty.limit || 0;
-  var idealLength = 10;
+  var minRating = 0;
 
-  while(index < idealLength && index < length) {
-    var name = yelpResults[0]['businesses'][index]['name'];
-    var address = yelpResults[0]['businesses'][index]['location']['display_address'];
-    var rating = yelpResults[0]['businesses'][index]['rating'];
-    var review_count = yelpResults[0]['businesses'][index]['review_count'];
-
-    //console.log("INDEX " + index, yelpResults[0]['businesses'][index]);
-    //console.log(">>> " + name + ": ", address);
-    //console.log("--> rating: " + rating + "  review_count: " + review_count);
-
-    // STILL NEEDS ADDITIONAL FILTERS, EX:
-
-    // IF ( rating >= 4 && review_count > 50 )
-    // More changes to come...   ~Paul
-    topResults.push(yelpResults[0]['businesses'][index]);
-    index++;
+  //Push all businesses from yelpResults into one array for easy filtering
+  for(var i = 0; i < yelpResults.length; i++){
+    if(yelpResults[i].businesses){
+      allBusinesses = allBusinesses.concat(yelpResults[i].businesses);
+    }
   }
-  console.log("topResults: ", topResults);
+  //loop through each business and compare ratings, only push the overall top 10 into topResults
+  for(var j = 0; j < allBusinesses.length; j++){
+    //yelp includes some highly rated businesses well outside of the search radius, possibly a "featured business"
+    //if such a business is included, skip over it
+    if(allBusinesses[j].distance > yelpProperty.radius_filter){
+      continue;
+    }
+    //Push the first 10 businesses into topResults
+    if(topResults.length < 10){
+      topResults.push(allBusinesses[j]);
+    } else {
+      //compare ratings
+      for(var k = 0; k < topResults.length; k++){
+        //Check rating
+        if(allBusinesses[j].rating > topResults[k].rating){
+          topResults[k] = allBusinesses[j];
+          //once a business is added to topResults, move on to the next business
+          break;
+        //if ratings are equal, choose the business with higher number of reviews
+        } else if(allBusinesses[j].rating === topResults[k].rating && allBusinesses[j].review_count > topResults[k].review_count){
+          topResults[k] = allBusinesses[j];
+          //once a business is added to topResults, move on to the next business
+          break;
+        }
+      }
+    }
+  }
 
   var result = {
     results: topResults
