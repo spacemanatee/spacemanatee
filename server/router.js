@@ -6,8 +6,10 @@ var router = express.Router();
 router.post('/search', function(req, res) {
   console.log('(POST "/search") Now searching the Yelp API...');
   // call request-handler to perform the work
-  var googleCoords = filter(req.body);
-  requestHandler.performSearch(req, res, googleCoords);
+  var googleFilterObj=filter(req.body)
+  var googleCoords = googleFilterObj.filteredCoords;
+  var distance = googleFilterObj.distance;
+  requestHandler.performSearch(req, res, googleCoords, distance);
 });
 
 router.post('/*', function(req, res) {
