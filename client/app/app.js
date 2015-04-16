@@ -101,14 +101,12 @@ angular.module('app', ['autofill-directive', 'ngRoute'])
     }
     // this function generate a view to display the restaurant image and link
     function renderView(i, places){
-      var description = '<div>' +
-          '<h1>' + places[i].name + '</h1>' +
-          '<div>' + '<img src="'+ places[i]["image_url"] +'"/>'
-          +'</div>' +
-          '<div>' + '<img src="'+ places[i]["rating_img_url"] +'"/>'
-          + 'rating: ' +places[i]["rating"] 
-          +'</div>' 
-          +'<a href="'+places[i]["url"] +'" target="_blank"> Visit Yelp</a>'
+      var description = '<div class="descriptionDiv">' +
+          '<h1 style="font-size: 2.0em">' + places[i].name + '</h1>'
+          + '<img src="'+ places[i]["image_url"] +'"/>'
+          + '<div style="padding:5px;font-weight:bold;">' + 'Yelp Rating:&nbsp;&nbsp;'
+          + '<img style="vertical-align:middle;" src="'+ places[i]["rating_img_url"] +'"/>' + '</div>' 
+          +'<a href="'+places[i]["url"] +'" target="_blank"> Visit on Yelp</a>'
           +'</div>';
       return description;
     }

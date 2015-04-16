@@ -18,3 +18,20 @@ html, body, #map-canvas {
   height: 92%;
   padding: 5;
 }
+
+#map-canvas {border: solid 3px #9ba894;}
+
+body { 
+  background-image:url('../images/ricepaper_v3.png');
+}
+
+h1 {font-family: 'Rancho', helvetica, arial; font-size: 3em;}
+h1 span {font-family: 'Lobster', helvetica, arial; font-size: 0.9em;}
+
+.descriptionDiv {
+  background-image:url('../images/food.png'); 
+  width:275px;
+  overflow: auto;
+  text-align: center;
+  padding-bottom:10px;
+}

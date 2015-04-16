@@ -1,17 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" ng-app='app' ng-controller="mapCtrl">
   <head>
-    <title>Space Manatee</title>
+    <title>Road Trip Advisor</title>
     <meta charset="UTF-8">
 
     <link rel="stylesheet" type="text/css" href="styles/style.css" />
-
-<!--     <style type="text/css">
-      html, body, #map-canvas { height: 100%; margin: 0; padding: 0;}
-    </style> -->
+    <link href='http://fonts.googleapis.com/css?family=Lobster|Rancho|Arvo' rel='stylesheet' type='text/css'>
 
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
-
     <script type="text/javascript">
 
       var map;
@@ -48,12 +44,12 @@
 
   </head>
   <body>
-    <h1 id="title">Space Manatee</h1>
+    <h1 id="title">Road Trip <span>Advisor</span></h1>
 
     <div id='journey'>
       <form name="submitForm" autofill-submit='submit()'>
         <input type='text' autofill class="submissionfield" id="start" placeholder="Starting location..." ng-model='location.start'>
-        <input type="text" autofill class="submissionfield" id="end" placeholder="Where are you going?" ng-model='location.end'><br><br>
+        <input type="text" autofill class="submissionfield" id="end" placeholder="Destination..." ng-model='location.end'><br><br>
         <select name="serviceSelect" ng-model='optionFilter' ng-options="option.value as option.name for option in optionSelections"></select>
         <select name="distanceSelect" ng-model='distanceFilter' ng-options="distance.value as distance.name for distance in distanceSelections"></select>
         <button>Let's Go!</button>
