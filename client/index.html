@@ -1,31 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" ng-app='app' ng-controller="mapCtrl">
   <head>
-    <link rel="stylesheet" type="text/css" href="styles/style.css" />
-    <meta charset="UTF-8">
     <title>Space Manatee</title>
-    <h1 id="title">Space Manatee</h1>
+    <meta charset="UTF-8">
 
-
-    <div id='journey'>
-      <form name="submitForm" autofill-submit='submit()'>
-        <input type='text' autofill class="submissionfield" id="start" placeholder="Starting location..." ng-model='location.start'>
-        <input type="text" autofill class="submissionfield" id="end" placeholder="Where are you going?" ng-model='location.end'>
-        <br><br>
-        <select name="serviceSelect" ng-model='optionFilter' ng-options="option.value as option.name for option in optionSelections">
-        </select>
-        <select name="distanceSelect" ng-model='distanceFilter' ng-options="distance.value as distance.name for distance in distanceSelections">
-        </select>
-        <button>Let's Go!</button>
-      </form>
-    </div>
-   </br>
+    <link rel="stylesheet" type="text/css" href="styles/style.css" />
 
 <!--     <style type="text/css">
       html, body, #map-canvas { height: 100%; margin: 0; padding: 0;}
     </style> -->
 
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?&libraries=places"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
 
     <script type="text/javascript">
 
@@ -63,8 +48,20 @@
 
   </head>
   <body>
+    <h1 id="title">Space Manatee</h1>
 
-<div id="map-canvas"></div>
+    <div id='journey'>
+      <form name="submitForm" autofill-submit='submit()'>
+        <input type='text' autofill class="submissionfield" id="start" placeholder="Starting location..." ng-model='location.start'>
+        <input type="text" autofill class="submissionfield" id="end" placeholder="Where are you going?" ng-model='location.end'><br><br>
+        <select name="serviceSelect" ng-model='optionFilter' ng-options="option.value as option.name for option in optionSelections"></select>
+        <select name="distanceSelect" ng-model='distanceFilter' ng-options="distance.value as distance.name for distance in distanceSelections"></select>
+        <button>Let's Go!</button>
+      </form>
+    </div></br>
+
+    <div id="map-canvas"></div>
+
 
     <script src="lib/angular/angular.js"></script>
     <script src="lib/angular-route/angular-route.js"></script>
