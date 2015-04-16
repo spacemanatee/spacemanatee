@@ -47,7 +47,7 @@ function calcDistance(pt1, pt2) {
 }
 
 var commonFilter=["McDonald's", "Burger King", "Jack in the Box", "Carl's Junior", "StarBucks", "Subway", 
-"Pizza Hut", "Del Taco", "Taco Bell", "Chick-fil-A","Farm", "Truck", "In-N-Out"];
+"Pizza Hut", "Del Taco", "Taco Bell", "Chick-fil-A", "Farm", "Truck", "In-N-Out"];
 
 // check if a place is a common place to be filtered out
 function isCommonPlace(businessEntry, commonFilter){
