@@ -32,8 +32,7 @@ var filter = function(requestBody){
 
   var counter = 0;
   var filteredCoords = [];
-
-  //Loop through array and only push the coordinates that are distanceBetweenQueries apart
+  
   for (var i = 0; i < coordArray.length; i++){
     if(counter > distanceBetweenQueries){
       filteredCoords.push(coordArray[i]);
@@ -43,7 +42,10 @@ var filter = function(requestBody){
     }
   }
 
-  return filteredCoords;
+  return {
+    distance: distance,
+    filteredCoords:filteredCoords
+  }
 }
 
 module.exports = filter;
