@@ -189,7 +189,7 @@ module.exports.createTopResultsJSON = function(yelpResults, distance) {
         m++;
       }
     }
-    if (n >= 20) { // if have 20 entries , exit the for loop
+    if (n >= 20 || m >= allBusinesses.length) { // if have 20 entries , exit the for loop
       break;
     }
   }
