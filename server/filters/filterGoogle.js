@@ -19,7 +19,7 @@ var filter = function(requestBody){
   var distanceBetweenQueries = 10;
 
   //parse distance into an int
-  distance = distance.split(" ");
+  distance = distance.replace(/\,/g,"").split(" ");
   distance = parseInt(distance[0]);
 
   //Convert coordObj from an object to an array to calculate distance between points
