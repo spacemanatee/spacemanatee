@@ -28,25 +28,25 @@ if (typeof(Number.prototype.toRad) === "undefined") {
 // calculate the distance between 2 waypoints, given their latitudes and longitudes, return distance in miles
 function calcDistance(pt1, pt2) {
   var R = 6371; // earth radius, in km
-  var lat1= pt1.location.coordinate['latitude']; 
+  var lat1= pt1.location.coordinate['latitude'];
   var lon1= pt1.location.coordinate['longitude'];
   var lat2= pt2.location.coordinate['latitude'];
   var lon2= pt2.location.coordinate['longitude'];
 
 
-  var dLat = (lat2-lat1).toRad(); 
+  var dLat = (lat2-lat1).toRad();
   var dLon = (lon2-lon1).toRad();
   var lat1 = lat1.toRad();
   var lat2 = lat2.toRad();
 
   var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-          Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
-  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+          Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
   var distance = R * c * 0.621371; // convert distance from km to miles
   return distance;
 }
 
-var commonFilter=["McDonald's", "Burger King", "Jack in the Box", "Carl's Junior", "StarBucks", "Subway", 
+var commonFilter=["McDonald's", "Burger King", "Jack in the Box", "Carl's Junior", "StarBucks", "Subway",
 "Pizza Hut", "Del Taco", "Taco Bell", "Chick-fil-A", "Farm", "Truck", "In-N-Out"];
 
 // check if a place is a common place to be filtered out
@@ -73,7 +73,7 @@ function parseGoogleCoord(googleCoord) {
   return obj;
 }
 
-// trim the google waypoint coordinate to take out start and end way point so no clustering at 2 ends. 
+// trim the google waypoint coordinate to take out start and end way point so no clustering at 2 ends.
 function trimGoogleCoord(googleCoords, distance) {
   var trimmedCoords = [];
   //Loop through array and only push the coordinates that are distanceBetweenQueries apart
@@ -82,7 +82,7 @@ function trimGoogleCoord(googleCoords, distance) {
     if (calcDistance(parseGoogleCoord(googleCoords[i]), parseGoogleCoord(googleCoords[0])) >= distance/20 &&
       calcDistance(parseGoogleCoord(googleCoords[i]), parseGoogleCoord(googleCoords[googleCoords.length-1])) >= distance/20) {
       trimmedCoords.push(googleCoords[i]);
-    } 
+    }
   }
   return trimmedCoords;
 }
@@ -95,6 +95,14 @@ module.exports.searchYelp = function (req, res, googleCoords, distance, callback
   var counter = 0;
   // Array that stores all of the Yelp results from all calls to Yelp
   var yelpResults = [];
+
+  console.log(req.body);
+
+  // yelp search parameter configuration
+  yelpProperty.term = req.body.optionFilter;           // Type of business (food, restaurants, bars, hotels, etc.)
+  yelpProperty.radius_filter = req.body.distanceFilter * 1609.34;  // Search radius: 1 mile = 1609.3 meters, 5 miles is good for rural areas
+
+
   //Request yelp for each point along route that is returned by filterGoogle.js
   for(var i = 0; i < trimmedCoords.length; i++){
     //yelpClient.search is asynchronous and so we must use a closure scope to maintain the value of i
@@ -165,7 +173,7 @@ module.exports.createTopResultsJSON = function(yelpResults, distance) {
   // start the evenSpread algorithm to create a new array of results, which will be combined later with the topResults
   var startingCoord;  // keep a track of starting Coordinate
   evenSpreadResults[0] = allBusinesses[1]; // push the starting point result to the array
-  var n = 0;  
+  var n = 0;
 
   for (var m = 1; m < allBusinesses.length; ) {
     if ( calcDistance(evenSpreadResults[n], allBusinesses[m])<(distance/20)) { // if next waypoint less than total distance/20 mi away
@@ -173,15 +181,15 @@ module.exports.createTopResultsJSON = function(yelpResults, distance) {
       m++;
     }
     else { // if the next waypoint is greater than distance/20 mi away
-      if (allBusinesses[m].distance > yelpProperty.radius_filter || allBusinesses[m].rating < 4 || 
+      if (allBusinesses[m].distance > yelpProperty.radius_filter || allBusinesses[m].rating < 4 ||
         allBusinesses[m].review_count<5 || isCommonPlace(allBusinesses[m], commonFilter)) {
-        // if the business distance is out of the searching radius, 
+        // if the business distance is out of the searching radius,
         // or if the rating is less than 4
         // or if the review count is less than 5
         // or if the place is deemed a common place deemed by the commonFilter
         // then skip
         m++;
-      } 
+      }
       else {
         // push the result to the array, start looking for the next entry
         n++;
