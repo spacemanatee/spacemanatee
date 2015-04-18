@@ -96,12 +96,9 @@ module.exports.searchYelp = function (req, res, googleCoords, distance, callback
   // Array that stores all of the Yelp results from all calls to Yelp
   var yelpResults = [];
 
-  console.log(req.body);
-
   // yelp search parameter configuration
   yelpProperty.term = req.body.optionFilter;           // Type of business (food, restaurants, bars, hotels, etc.)
-  yelpProperty.radius_filter = req.body.distanceFilter * 1609.34;  // Search radius: 1 mile = 1609.3 meters, 5 miles is good for rural areas
-
+ 
 
   //Request yelp for each point along route that is returned by filterGoogle.js
   for(var i = 0; i < trimmedCoords.length; i++){

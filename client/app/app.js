@@ -2,10 +2,6 @@ angular.module('app', ['autofill-directive', 'ngRoute'])
 
 .controller('mapCtrl', function($scope, Maps) {
   // initialize the option 
-  $scope.distanceSelections = [{name: '1 Mile', value: 1}, 
-  {name: '2 Miles', value: 2}, 
-  {name: '5 Miles', value: 5}, 
-  {name: '10 Miles', value: 10}];
 
   $scope.optionSelections = [{name: 'Everything', value:""},
   {name: 'Food', value:"food"},
@@ -16,7 +12,6 @@ angular.module('app', ['autofill-directive', 'ngRoute'])
   {name: 'Pets', value:"pets"}];
 
   $scope.optionFilter = $scope.optionSelections[1].value;
-  $scope.distanceFilter = $scope.distanceSelections[0].value;
 
   $scope.submit = function(city) {
     console.log("SCOPE ENTIRE: ", $scope.location);
@@ -52,7 +47,6 @@ angular.module('app', ['autofill-directive', 'ngRoute'])
           var sendData = {
             distance: response.routes[0].legs[0].distance.text,
             optionFilter: $scope.optionFilter,
-            distanceFilter: $scope.distanceFilter,
             waypoints: {}
           };
 
