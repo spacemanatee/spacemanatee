@@ -1,6 +1,10 @@
+/* CSS Reset */
+html,body,div,span,applet,object,iframe,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,dl,dt,dd,ol,ul,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,label,legend,p,blockquote,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-weight:inherit;font-style:inherit;font-size:100%;font-family:inherit;vertical-align:baseline;}body{line-height:1;color:black;background:white;}:focus{outline:0;}table{border-collapse:collapse;border-spacing:0;}caption,th,td{text-align:left;font-weight:normal;}fieldset,img{border:0;}address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal;}ol,ul{list-style:none;}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}blockquote:before,blockquote:after,q:before,q:after{content:"";}blockquote,q{quotes:"" "";}abbr,acronym{border:0;}
+
 #title {
   text-align: center;
   float: center;
+  padding: 15px 0 15px 0;
 }
 
 #journey {
@@ -16,7 +20,7 @@
 
 html, body, #map-canvas {
   height: 92%;
-  padding: 5;
+  padding: 0px 15px 15px 15px;
 }
 
 #map-canvas {border: solid 3px #9ba894;}
@@ -25,8 +29,16 @@ body {
   background-image:url('../images/ricepaper_v3.png');
 }
 
-h1 {font-family: 'Rancho', helvetica, arial; font-size: 3em;}
-h1 span {font-family: 'Lobster', helvetica, arial; font-size: 0.9em;}
+h1 {
+  font-family: 'Rancho', helvetica, arial; 
+  font-size: 3em;
+}
+h1 span {
+  font-family: 'Lobster', helvetica, arial; 
+  font-size: 0.9em;
+  position:relative;
+  top:1px;
+}
 
 .descriptionDiv {
   background-image:url('../images/food.png'); 
