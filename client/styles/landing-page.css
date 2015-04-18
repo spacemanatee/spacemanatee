@@ -31,11 +31,11 @@ h6 {
 }
 
 .intro-header {
-    padding-top: 50px; /* If you're making other pages, make sure there is 50px of padding to make sure the navbar doesn't overlap content! */
+    padding-top: 30px; /* If you're making other pages, make sure there is 50px of padding to make sure the navbar doesn't overlap content! */
     padding-bottom: 50px;
     text-align: center;
     color: #f8f8f8;
-    background: url(../images/roadtripbg.jpg) no-repeat center center;
+    background: url(../images/roadtripbg.jpg) no-repeat center;
     background-size: cover;
 }
 
@@ -48,7 +48,7 @@ h6 {
 .intro-message > h1 {
     margin: 0;
     text-shadow: 2px 2px 3px rgba(0,0,0,0.6);
-    font-size: 5em;
+    font-size: 8em;
 }
 
 .intro-divider {
