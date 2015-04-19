@@ -1,24 +1,14 @@
 //Filter coordinates received from front end POST request
 //into a smaller number of coordinates for Yelp requests
 
-//Google also returns total distance value in meters which may be
-//useful in determining how far apart the yelp requests should be
-
 var filter = function(requestBody){
-  //coordArray is the overview_path array from Google
-
-  //The best way to ensure we get every part of the road would be to use the total trip distance
-  //and divide that by the number of coordinates in coordObj.  This would give us the distance
-  //between each coordinate allowing us to determine how many/which coordinates we want to send
-  //to yelp
-
-  var distance = requestBody.distance;
-  var coordObj = requestBody.waypoints;
+  var distance = requestBody.distance;  //Total trip distance
+  var coordObj = requestBody.waypoints; //All of the coordinate points along the route returned by Google
 
   //The distance between each yelp query in miles (i.e. Yelp will be queried every 10 miles along the route)
   var distanceBetweenQueries = 10;
 
-  //parse distance into an int
+  //parse distance from string into int
   distance = distance.replace(/\,/g,"").split(" ");
   distance = parseInt(distance[0]);
 
@@ -28,11 +18,12 @@ var filter = function(requestBody){
     coordArray.push(coordObj[key]);
   }
 
+  //The coordArray points are not equally distant from one another so distanceBetweenPoints is an approximate value
   var distanceBetweenPoints = distance / coordArray.length;
 
   var counter = 0;
   var filteredCoords = [];
-  
+  //Loop through each coordinate along the route and only add the coordinates that are distanceBetweenQueries apart
   for (var i = 0; i < coordArray.length; i++){
     if(counter > distanceBetweenQueries){
       filteredCoords.push(coordArray[i]);
