@@ -1,7 +1,7 @@
 angular.module('app', ['autofill-directive', 'ngRoute'])
 
 .controller('mapCtrl', function($scope, Maps) {
-  // initialize the option 
+  // initialize the option
 
   $scope.optionSelections = [{name: 'Everything', value:""},
   {name: 'Food', value:"food"},
@@ -75,7 +75,7 @@ angular.module('app', ['autofill-directive', 'ngRoute'])
                 var lat = places[i].location.coordinate.latitude;
                 var lng = places[i].location.coordinate.longitude;
                 var description = renderView(i, places);
-                
+
                 var marker = new google.maps.Marker({
                   map: map,
                   position: new google.maps.LatLng(lat,lng),
@@ -99,7 +99,7 @@ angular.module('app', ['autofill-directive', 'ngRoute'])
           '<h1 style="font-size: 2.0em">' + places[i].name + '</h1>'
           + '<img src="'+ places[i]["image_url"] +'"/>'
           + '<div style="padding:5px;font-weight:bold;">' + 'Yelp Rating:&nbsp;&nbsp;'
-          + '<img style="vertical-align:middle;" src="'+ places[i]["rating_img_url"] +'"/>' + '</div>' 
+          + '<img style="vertical-align:middle;" src="'+ places[i]["rating_img_url"] +'"/>' + '</div>'
           +'<a href="'+places[i]["url"] +'" target="_blank"> Visit on Yelp</a>'
           +'</div>';
       return description;
