@@ -28,20 +28,20 @@ if (typeof(Number.prototype.toRad) === "undefined") {
 // calculate the distance between 2 waypoints, given their latitudes and longitudes, return distance in miles
 function calcDistance(pt1, pt2) {
   var R = 6371; // earth radius, in km
-  var lat1= pt1.location.coordinate['latitude'];
-  var lon1= pt1.location.coordinate['longitude'];
-  var lat2= pt2.location.coordinate['latitude'];
-  var lon2= pt2.location.coordinate['longitude'];
+  var lat1 = pt1.location.coordinate['latitude'];
+  var lon1 = pt1.location.coordinate['longitude'];
+  var lat2 = pt2.location.coordinate['latitude'];
+  var lon2 = pt2.location.coordinate['longitude'];
 
 
-  var dLat = (lat2-lat1).toRad();
-  var dLon = (lon2-lon1).toRad();
+  var dLat = (lat2 - lat1).toRad();
+  var dLon = (lon2 - lon1).toRad();
   var lat1 = lat1.toRad();
   var lat2 = lat2.toRad();
 
-  var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-          Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
-  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+          Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   var distance = R * c * 0.621371; // convert distance from km to miles
   return distance;
 }
@@ -51,7 +51,7 @@ var commonFilter=["McDonald's", "Burger King", "Jack in the Box", "Carl's Junior
 
 // check if a place is a common place to be filtered out
 function isCommonPlace(businessEntry, commonFilter){
-  for (var i= 0; i < commonFilter.length; i++) {
+  for (var i = 0; i < commonFilter.length; i++) {
     if (businessEntry.name.indexOf(commonFilter[i]) > -1)
       return true;
   }
@@ -60,9 +60,9 @@ function isCommonPlace(businessEntry, commonFilter){
 
 // parse google coordinate into {latitude:..., longitude: ... } format
 function parseGoogleCoord(googleCoord) {
-  var latitude= parseFloat(googleCoord.match(/^.*,/)[0].replace(",", ""));
-  var longitude= parseFloat(googleCoord.match(/,.*$/)[0].replace(",", ""));
-  var obj ={
+  var latitude = parseFloat(googleCoord.match(/^.*,/)[0].replace(",", ""));
+  var longitude = parseFloat(googleCoord.match(/,.*$/)[0].replace(",", ""));
+  var obj = {
     location: {
       coordinate : {
         latitude: latitude,
@@ -78,9 +78,9 @@ function trimGoogleCoord(googleCoords, distance) {
   var trimmedCoords = [];
   //Loop through array and only push the coordinates that are distanceBetweenQueries apart
 
-  for (var i=0; i<googleCoords.length; i++) {
-    if (calcDistance(parseGoogleCoord(googleCoords[i]), parseGoogleCoord(googleCoords[0])) >= distance/20 &&
-      calcDistance(parseGoogleCoord(googleCoords[i]), parseGoogleCoord(googleCoords[googleCoords.length-1])) >= distance/20) {
+  for (var i = 0; i < googleCoords.length; i++) {
+    if (calcDistance(parseGoogleCoord(googleCoords[i]), parseGoogleCoord(googleCoords[0])) >= distance / 20 &&
+      calcDistance(parseGoogleCoord(googleCoords[i]), parseGoogleCoord(googleCoords[googleCoords.length - 1])) >= distance / 20) {
       trimmedCoords.push(googleCoords[i]);
     }
   }
@@ -98,7 +98,7 @@ module.exports.searchYelp = function (req, res, googleCoords, distance, callback
 
   // yelp search parameter configuration
   yelpProperty.term = req.body.optionFilter;           // Type of business (food, restaurants, bars, hotels, etc.)
- 
+
 
   //Request yelp for each point along route that is returned by filterGoogle.js
   for(var i = 0; i < trimmedCoords.length; i++){
@@ -140,7 +140,7 @@ module.exports.createTopResultsJSON = function(yelpResults, distance) {
     }
   }
   //loop through each business and compare ratings, only push the overall top 10 into topResults
-  for(var j = 0; j < allBusinesses.length; j++){
+  for(var j = 0;j < allBusinesses.length; j++){
     //yelp includes some highly rated businesses well outside of the search radius, possibly a "featured business"
     //if such a business is included, skip over it
     if(allBusinesses[j].distance > yelpProperty.radius_filter){
@@ -168,18 +168,19 @@ module.exports.createTopResultsJSON = function(yelpResults, distance) {
   }
 
   // start the evenSpread algorithm to create a new array of results, which will be combined later with the topResults
-  var startingCoord;  // keep a track of starting Coordinate
+  var startingCoord;  // keep track of starting coordinates
   evenSpreadResults[0] = allBusinesses[1]; // push the starting point result to the array
   var n = 0;
 
-  for (var m = 1; m < allBusinesses.length; ) {
-    if ( calcDistance(evenSpreadResults[n], allBusinesses[m])<(distance/20)) { // if next waypoint less than total distance/20 mi away
+  for (var m = 1; m < allBusinesses.length; m) {
+    // if next waypoint less than total distance/20 mi away
+    if (calcDistance(evenSpreadResults[n], allBusinesses[m]) < (distance / 20)) {
       // then skip
       m++;
     }
     else { // if the next waypoint is greater than distance/20 mi away
       if (allBusinesses[m].distance > yelpProperty.radius_filter || allBusinesses[m].rating < 4 ||
-        allBusinesses[m].review_count<5 || isCommonPlace(allBusinesses[m], commonFilter)) {
+        allBusinesses[m].review_count < 5 || isCommonPlace(allBusinesses[m], commonFilter)) {
         // if the business distance is out of the searching radius,
         // or if the rating is less than 4
         // or if the review count is less than 5
@@ -201,7 +202,6 @@ module.exports.createTopResultsJSON = function(yelpResults, distance) {
 
   // combine the best results along the road with the even spread results along the roads
   var finalResults = evenSpreadResults.concat(topResults);
-
 
   var result = {
     results: finalResults

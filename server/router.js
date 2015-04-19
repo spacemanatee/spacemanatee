@@ -5,10 +5,12 @@ var router = express.Router();
 
 router.post('/search', function(req, res) {
   console.log('(POST "/search") Now searching the Yelp API...');
-  // call request-handler to perform the work
-  var googleFilterObj=filter(req.body)
+  //call the google filter to return only the points along the route that are n distance apart
+  var googleFilterObj = filter(req.body);
+
   var googleCoords = googleFilterObj.filteredCoords;
   var distance = googleFilterObj.distance;
+
   requestHandler.performSearch(req, res, googleCoords, distance);
 });
 
