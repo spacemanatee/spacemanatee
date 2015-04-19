@@ -12,36 +12,37 @@ html,body,div,span,applet,object,iframe,a,abbr,acronym,address,big,cite,code,del
 }
 
 .submissionfield {
-  width: 350px;
+  width: 25%;
+  min-width: 200px;
   height: 15px;
   border: 1px solid #999999;
   padding: 5px;
 }
 
 html, body, #map-canvas {
-  height: 92%;
+  height: 91%;
   padding: 0px 15px 15px 15px;
 }
 
 #map-canvas {border: solid 3px #9ba894;}
 
-body { 
+body {
   background-image:url('../images/ricepaper_v3.png');
 }
 
 h1 {
-  font-family: 'Rancho', helvetica, arial; 
+  font-family: 'Rancho', helvetica, arial;
   font-size: 3em;
 }
 h1 span {
-  font-family: 'Lobster', helvetica, arial; 
+  font-family: 'Lobster', helvetica, arial;
   font-size: 0.9em;
   position:relative;
   top:1px;
 }
 
 .descriptionDiv {
-  background-image:url('../images/food.png'); 
+  background-image:url('../images/food.png');
   width:275px;
   overflow: auto;
   text-align: center;
