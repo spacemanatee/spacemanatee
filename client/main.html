@@ -59,12 +59,18 @@
     <div id="topTen" style="margin-left: 20%;margin-right: 20%;vertical-align: middle;"> 
       <div style=>Here's our Top 10 favorite spots along the journey! </div><br>
       <div ng-if="!!topTen">
-        <div ng-repeat= "top in topTen" style="border-style: solid; border-width: 5px;">
-          <img ng-src='{{top["image_url"]}}' alt="Sites image not yet available" /><br>
-          <div>{{top.name}} </div><br>
-          <img ng-src='{{top["rating_img_url"]}}' alt="rating not yet available" /><br>
-          <a ng-href='{{top["url"]}}' target="_blank"> Visit on Yelp</a><br>
+        <div ng-repeat= "top in topTen" style="border-style: solid; border-width: 1px;">
         <div>
+        <table>
+          <tr>
+            <td><img ng-src='{{top["image_url"] ? top["image_url"] : "./images/default.jpg"}}' alt="Sites image not yet available" /></td>
+            <td><div>{{top.name}} </div></td>
+            <td><img ng-src='{{top["rating_img_url"]}}' alt="rating not yet available" /></td>
+            <td><a ng-href='{{top["url"]}}' target="_blank"> Visit on Yelp</a></td>
+          </tr>
+        </table>
+        </div>
+        </div>
       </div>
     </div>
 
