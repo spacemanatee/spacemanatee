@@ -24,8 +24,8 @@ angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
       $element.find("main-area").append(pInvalid);
     } else {
       $element.find("main-area").append(pValid);
-    } 
-  }
+    }
+  };
 
   $scope.submit = function(city) {
     $scope.geoCodeNotSuccessful=false;
@@ -103,7 +103,7 @@ angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
         console.log('response: ', response);
         console.log('error: ', error);
         return response;
-      })
+      });
     };
 
   return {
