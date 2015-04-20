@@ -82,7 +82,8 @@ angular.module('app', ['autofill-directive', 'ngRoute'])
                 var marker = new google.maps.Marker({
                   map: map,
                   position: new google.maps.LatLng(lat,lng),
-                  animation: google.maps.Animation.DROP
+                  animation: google.maps.Animation.DROP,
+                  icon: "images/smPin1.png"
                 });
                 //Setup the pop-up box that opens when you click a marker
                 attachInstructionText(marker, description);
