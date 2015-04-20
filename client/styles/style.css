@@ -12,9 +12,7 @@ html,body,div,span,applet,object,iframe,a,abbr,acronym,address,big,cite,code,del
 }
 
 .submissionfield {
-  width: 25%;
-  min-width: 200px;
-  height: 15px;
+  min-width: 250px;
   border: 1px solid #999999;
   padding: 5px;
 }
@@ -26,6 +24,8 @@ html, body, #map-canvas {
 
 #map-canvas {
   border: solid 3px #9ba894;
+  width: 100%;
+  height: 500px;
 }
 
 body {
@@ -71,7 +71,11 @@ table {
 }
 
 #topTenList {
-  border: 1px solid #999999;;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  vertical-align: middle;
+  text-align: center;
 }
 .snippet {
   display: block;
@@ -83,11 +87,12 @@ table {
 }
 
 #warningMsg {
-  margin-left: 20%;
-  margin-right: 20%;
-  vertical-align: middle;
-  text-align: center;
-  font-size: 2.4em;
+  padding:10px;
+  margin:10px;
+  border: 1px solid #c7244e;
+  border-radius:5px;
+  background-color: #f9f2f4;
+  color: #c7244e;
   font-family: 'Rancho', helvetica, arial;
-  color: red;
+  font-size: 2em;
 }
