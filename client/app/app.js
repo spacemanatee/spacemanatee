@@ -1,6 +1,6 @@
-angular.module('app', ['autofill-directive', 'ngRoute'])
+angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
 
-.controller('mapCtrl', function($scope, $element, Maps) {
+.controller('mapCtrl', function($scope, $element, Maps, Utility) {
   //initialize the user input option selector
   $scope.optionSelections = [
     {name: 'Everything', value:""},
@@ -80,62 +80,16 @@ angular.module('app', ['autofill-directive', 'ngRoute'])
           .then(function(res){
             console.log("PROMISE OBJ: ", res.data.results);
             // get back recommendations from Yelp and display as markers
-            placemarkers(res.data.results);
+            Utility.placemarkers(res.data.results);
             $scope.topTen = res.data.topTen;
             console.log(res.data.results);
           });
-
-          function placemarkers (places) {
-            //Place each marker on the map
-            for (var i = 0; i < places.length; i++) {
-               setDelay(i, places);
-            }
-            // set delay for dropping each marker
-            function setDelay(i, places) {
-              setTimeout(function() {
-                var lat = places[i].location.coordinate.latitude;
-                var lng = places[i].location.coordinate.longitude;
-                var description = renderView(i, places);
-
-                var marker = new google.maps.Marker({
-                  map: map,
-                  position: new google.maps.LatLng(lat,lng),
-                  animation: google.maps.Animation.DROP,
-                  icon: "images/smPin1.png"
-                });
-                //Setup the pop-up box that opens when you click a marker
-                attachInstructionText(marker, description);
-                markerArray[i] = marker;
-              }, i * 300);
-            }
-          }
-
         } else {
           //Log the status code on error
           console.log("Geocode was not successful: " + status);
           $scope.geoCodeNotSuccessful=true;
           $scope.append($scope.geoCodeNotSuccessful);
         }
-      });
-    }
-    // this function generate a view to display the restaurant image and link
-    function renderView(i, places){
-      var description = '<div class="descriptionDiv">' +
-          '<a href="'+places[i]["url"] +'" target="_blank">' + '<h1 class="place-name">' + places[i].name + '</h1></a>'
-          + '<div style="padding:5px;font-weight:bold;">' + 'Yelp Rating:&nbsp;&nbsp;'
-          + '<img style="vertical-align:middle;" src="'+ places[i]["rating_img_url"] +'"/>' + '</div>'
-          + '<img src="'+ places[i]["image_url"] +'"/>'
-          + '<div class="snippet">' + places[i]["snippet_text"] + '</div>'
-          +'<a href="'+places[i]["url"] +'" target="_blank"> Visit on Yelp</a>'
-          +'</div>';
-      return description;
-    }
-
-    function attachInstructionText(marker, text) {
-      google.maps.event.addListener(marker, 'click', function() {
-        // Open an info window when the marker is clicked on
-        stepDisplay.setContent(text);
-        stepDisplay.open(map, marker);
       });
     }
   };
