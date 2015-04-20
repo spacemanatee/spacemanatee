@@ -18,13 +18,15 @@ html,body,div,span,applet,object,iframe,a,abbr,acronym,address,big,cite,code,del
 }
 
 html, body, #map-canvas {
-  height: 91%;
-  padding: 0px 15px 15px 15px;
+  height: 92%;
+  padding: 5px 15px 15px 15px;
 }
 
 #map-canvas {
   border: solid 3px #9ba894;
-  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  width: 90%;
   height: 500px;
 }
 

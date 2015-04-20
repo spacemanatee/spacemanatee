@@ -88,18 +88,17 @@
               <select name="serviceSelect" ng-model="optionFilter" ng-options="option.value as option.name for option in optionSelections" class="form-control" id="sel1"></select>
               <button type="submit" class="btn btn-default navbar-btn">Let's Go!</button>&nbsp;&nbsp;&nbsp;&nbsp;
             </form>
-          </div><br><br>
-          <div class="text-center text-warning bg-warning" ng-if="!!goeCodeNotSuccessful"  ng-model="goeCodeNotSuccessful"> Please enter a countinental location and resubmit.</div>
+          </div>
         </div><!-- col-lg-12 -->
       </div><!-- row -->
 
       <div id="warningMsg"></div></div>
       <main-area></main-area>
-      <div id="map-canvas"></div><br><br><br>
+      <div id="map-canvas"></div><br>
 
       <div class="row">
         <div class="col-lg-12">
-          <div id="topTen" style="margin-left: 20%;margin-right: 20%;vertical-align: middle;text-align: center;"> 
+          <div id="topTen" style="margin-left: 20%;margin-right: 20%;vertical-align: middle;text-align: center;">
             <div ng-if="!!topTen" ng-model="topTen">
               <h1>Here's our Top 10 favorite spots along the journey! </h1><br>
               <div ng-repeat= "top in topTen" id="topTenList">
