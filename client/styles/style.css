@@ -12,9 +12,7 @@ html,body,div,span,applet,object,iframe,a,abbr,acronym,address,big,cite,code,del
 }
 
 .submissionfield {
-  width: 25%;
-  min-width: 200px;
-  height: 15px;
+  min-width: 250px;
   border: 1px solid #999999;
   padding: 5px;
 }
@@ -26,6 +24,8 @@ html, body, #map-canvas {
 
 #map-canvas {
   border: solid 3px #9ba894;
+  width: 100%;
+  height: 500px;
 }
 
 body {
