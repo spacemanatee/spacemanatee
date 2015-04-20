@@ -133,7 +133,6 @@ angular.module('app', ['autofill-directive', 'ngRoute'])
 
   return {
     sendPost: sendPost,
-    getDirections: getDirections
   };
 
 });
