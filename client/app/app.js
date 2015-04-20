@@ -11,15 +11,21 @@ angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
     {name: 'Gas', value:"gas"},
     {name: 'Pets', value:"pets"}
   ];
-
+  //set default option filter to "food"
   $scope.optionFilter = $scope.optionSelections[1].value;
-  $scope.geoCodeNotSuccessful=false;
+  //initialize the geoCodeNotSuccessful to be used for determining valid continental destination or not
+  $scope.geoCodeNotSuccessful = false;
 
-  $scope.append = function(isInvalid) {
+  $scope.appendWarningMsg = function(isInvalid) {
+    // invalid message template
     var pInvalid = angular.element("<p id='warningMsg'/>");
     pInvalid.text("Please choose a continental location and resubmit");
+    // valid message template
     var pValid = angular.element("<p id='warningMsg'/>");
     pValid.text("");
+    //check to see if the location entered is invalid
+    //if location is invalid, then append invalid message 
+    // else, append a blank message 
     if (isInvalid) {
       $element.find("main-area").append(pInvalid);
     } else {
@@ -28,8 +34,8 @@ angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
   };
 
   $scope.submit = function(city) {
-    $scope.geoCodeNotSuccessful=false;
-    $element.find("main-area").empty();
+    $scope.geoCodeNotSuccessful = false;  // every time when submit button is pressed, reset the geoCodeNotSuccessful to false
+    $element.find("main-area").empty();   // clear out the warning messages from previous location input
     console.log("SCOPE ENTIRE: ", $scope.location);
     var startGeo, endGeo;
 
@@ -52,8 +58,9 @@ angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
 
       //send request to Google Maps Directions API with request object as data
       directionsService.route(request, function(response, status) {
-        if (status == google.maps.DirectionsStatus.OK) {
-          $scope.geoCodeNotSuccessful=false;
+        // successfully get the direction based on locations
+        if (status === google.maps.DirectionsStatus.OK) {
+          $scope.geoCodeNotSuccessful=false;  
           //Update the map on index.html
           directionsDisplay.setDirections(response);
 
@@ -61,6 +68,7 @@ angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
           console.log("LENGTH: ", response.routes[0].overview_path.length);
           console.log("OVERVIEW PATH: ", response.routes[0].overview_path);
 
+          // objects to be sent to backend
           var sendData = {
             distance: response.routes[0].legs[0].distance.text,
             optionFilter: $scope.optionFilter,
@@ -74,6 +82,7 @@ angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
           }
 
           console.log("sendData: ", sendData);
+          $scope.appendWarningMsg($scope.geoCodeNotSuccessful); // append the blank (no warning) message to main.html
 
           // Send all waypoints along route to server
           Maps.sendPost(sendData)
@@ -87,8 +96,9 @@ angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
         } else {
           //Log the status code on error
           console.log("Geocode was not successful: " + status);
-          $scope.geoCodeNotSuccessful=true;
-          $scope.append($scope.geoCodeNotSuccessful);
+          //set the geoCodeNotSuccessful to true
+          $scope.geoCodeNotSuccessful = true;
+          $scope.appendWarningMsg($scope.geoCodeNotSuccessful); // append the warning message to main.html
         }
       });
     }
