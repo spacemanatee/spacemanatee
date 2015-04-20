@@ -6,6 +6,9 @@
   "repository": "",
   "license": "Proprietary",
   "private": true,
+  "engines": {
+    "node": "0.12.x"
+    },
   "scripts": {
     "start": "",
     "test": "make test"
