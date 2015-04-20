@@ -12,20 +12,22 @@ html,body,div,span,applet,object,iframe,a,abbr,acronym,address,big,cite,code,del
 }
 
 .submissionfield {
-  width: 25%;
-  min-width: 200px;
-  height: 15px;
+  min-width: 250px;
   border: 1px solid #999999;
   padding: 5px;
 }
 
 html, body, #map-canvas {
-  height: 91%;
-  padding: 0px 15px 15px 15px;
+  height: 92%;
+  padding: 5px 15px 15px 15px;
 }
 
 #map-canvas {
   border: solid 3px #9ba894;
+  margin-left: auto;
+  margin-right: auto;
+  width: 90%;
+  height: 500px;
 }
 
 body {
@@ -87,7 +89,7 @@ table {
   margin-right: 20%;
   vertical-align: middle;
   text-align: center;
-  font-size: 2.4em;
+  font-size: 2.0em;
   font-family: 'Rancho', helvetica, arial;
   color: red;
 }
