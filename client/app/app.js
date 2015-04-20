@@ -65,6 +65,7 @@ angular.module('app', ['autofill-directive', 'ngRoute'])
             console.log("PROMISE OBJ: ", res.data.results);
             // get back recommendations from Yelp and display as markers
             placemarkers(res.data.results);
+            $scope.topTen = res.data.topTen;
           });
 
           function placemarkers (places) {
