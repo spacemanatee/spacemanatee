@@ -58,6 +58,10 @@ h1 span {
   background-image:url('../images/food.png');
 }
 
-table{
+table {
   table-layout: fixed;
+}
+
+#topTenList {
+  border: 1px solid #999999;;
 }

@@ -13,6 +13,7 @@ angular.module('app', ['autofill-directive', 'ngRoute'])
   ];
 
   $scope.optionFilter = $scope.optionSelections[1].value;
+  $scope.goeCodeNotSuccessful=false;
 
   $scope.submit = function(city) {
     console.log("SCOPE ENTIRE: ", $scope.location);
@@ -96,6 +97,7 @@ angular.module('app', ['autofill-directive', 'ngRoute'])
         } else {
           //Log the status code on error
           console.log("Geocode was not successful: " + status);
+          $scope.goeCodeNotSuccessful=true;
         }
       });
     }
