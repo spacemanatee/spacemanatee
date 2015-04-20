@@ -1,5 +1,4 @@
 var yelp = require('./yelp');
-var key = require('../api/api_key');
 
 // create yelp client using Oauth
 var yelpClient = yelp.createClient({
