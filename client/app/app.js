@@ -1,6 +1,6 @@
 angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
 
-.controller('mapCtrl', function($scope, $element, Maps, Utility) {
+.controller('mapCtrl', ['$scope', '$element', 'Maps', 'Utility', function($scope, $element, Maps, Utility) {
   //initialize the user input option selector
   $scope.optionSelections = [
     {name: 'Everything', value:""},
@@ -24,7 +24,7 @@ angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
       $element.find("main-area").append(pInvalid);
     } else {
       $element.find("main-area").append(pValid);
-    } 
+    }
   }
 
   $scope.submit = function(city) {
@@ -93,8 +93,8 @@ angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
       });
     }
   };
-})
-.factory('Maps', function($http) {
+}])
+.factory('Maps', ['$http', function($http) {
   //This function sends a POST to the server at route /csearch with all waypoints along route as data
   var sendPost = function(routeObject){
     return $http.post('/search', routeObject)
@@ -110,4 +110,4 @@ angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
     sendPost: sendPost
   };
 
-});
+}]);
