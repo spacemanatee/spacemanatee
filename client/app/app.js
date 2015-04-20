@@ -65,6 +65,7 @@ angular.module('app', ['autofill-directive', 'ngRoute'])
             console.log("PROMISE OBJ: ", res.data.results);
             // get back recommendations from Yelp and display as markers
             placemarkers(res.data.results);
+            console.log(res.data.results);
           });
 
           function placemarkers (places) {
@@ -100,10 +101,11 @@ angular.module('app', ['autofill-directive', 'ngRoute'])
     // this function generate a view to display the restaurant image and link
     function renderView(i, places){
       var description = '<div class="descriptionDiv">' +
-          '<h1 style="font-size: 2.0em">' + places[i].name + '</h1>'
-          + '<img src="'+ places[i]["image_url"] +'"/>'
+          '<a href="'+places[i]["url"] +'" target="_blank">' + '<h1 class="place-name">' + places[i].name + '</h1></a>'
           + '<div style="padding:5px;font-weight:bold;">' + 'Yelp Rating:&nbsp;&nbsp;'
           + '<img style="vertical-align:middle;" src="'+ places[i]["rating_img_url"] +'"/>' + '</div>'
+          + '<img src="'+ places[i]["image_url"] +'"/>'
+          + '<div class="snippet">' + places[i]["snippet_text"] + '</div>'
           +'<a href="'+places[i]["url"] +'" target="_blank"> Visit on Yelp</a>'
           +'</div>';
       return description;
