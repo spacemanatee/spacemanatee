@@ -53,11 +53,11 @@
         <select name="serviceSelect" ng-model='optionFilter' ng-options="option.value as option.name for option in optionSelections"></select>
         <button>Let's Go!</button>
       </form>
-    </div><br><br>
+    </div><br>
     <div ng-if="!!goeCodeNotSuccessful"  ng-model="goeCodeNotSuccessful"> Please enter a countinental location and resubmit
     </div>
     <div id="map-canvas"></div><br><br><br>
-    <div id="topTen" style="margin-left: 20%;margin-right: 20%;vertical-align: middle;text-align: center;"> 
+    <div id="topTen" style="margin-left: 20%;margin-right: 20%;vertical-align: middle;text-align: center;">
       <div><h1>Here's our Top 10 favorite spots along the journey! </h1></div><br>
       <div ng-if="!!topTen" ng-model="topTen">
         <div ng-repeat= "top in topTen" id="topTenList">
