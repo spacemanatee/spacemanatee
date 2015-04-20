@@ -1,6 +1,6 @@
 angular.module('app', ['autofill-directive', 'ngRoute'])
 
-.controller('mapCtrl', function($scope, Maps) {
+.controller('mapCtrl', function($scope, $element, Maps) {
   //initialize the user input option selector
   $scope.optionSelections = [
     {name: 'Everything', value:""},
@@ -13,9 +13,23 @@ angular.module('app', ['autofill-directive', 'ngRoute'])
   ];
 
   $scope.optionFilter = $scope.optionSelections[1].value;
-  $scope.goeCodeNotSuccessful=false;
+  $scope.geoCodeNotSuccessful=false;
+
+  $scope.append = function(isInvalid) {
+    var pInvalid = angular.element("<p id='warningMsg'/>");
+    pInvalid.text("Please choose a continental location and resubmit");
+    var pValid = angular.element("<p id='warningMsg'/>");
+    pValid.text("");
+    if (isInvalid) {
+      $element.find("main-area").append(pInvalid);
+    } else {
+      $element.find("main-area").append(pValid);
+    } 
+  }
 
   $scope.submit = function(city) {
+    $scope.geoCodeNotSuccessful=false;
+    $element.find("main-area").empty();
     console.log("SCOPE ENTIRE: ", $scope.location);
     var startGeo, endGeo;
 
@@ -39,6 +53,7 @@ angular.module('app', ['autofill-directive', 'ngRoute'])
       //send request to Google Maps Directions API with request object as data
       directionsService.route(request, function(response, status) {
         if (status == google.maps.DirectionsStatus.OK) {
+          $scope.geoCodeNotSuccessful=false;
           //Update the map on index.html
           directionsDisplay.setDirections(response);
 
@@ -98,7 +113,8 @@ angular.module('app', ['autofill-directive', 'ngRoute'])
         } else {
           //Log the status code on error
           console.log("Geocode was not successful: " + status);
-          $scope.goeCodeNotSuccessful=true;
+          $scope.geoCodeNotSuccessful=true;
+          $scope.append($scope.geoCodeNotSuccessful);
         }
       });
     }
@@ -124,7 +140,6 @@ angular.module('app', ['autofill-directive', 'ngRoute'])
     }
   };
 })
-
 .factory('Maps', function($http) {
   //This function sends a POST to the server at route /csearch with all waypoints along route as data
   var sendPost = function(routeObject){
