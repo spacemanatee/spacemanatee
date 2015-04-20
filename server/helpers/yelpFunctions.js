@@ -46,6 +46,15 @@ function calcDistance(pt1, pt2) {
   return distance;
 }
 
+function isAlreadyInArray(array, target) {
+  for (var i = 0 ; i < array.length; i++) {
+    if (array[i].name === target.name) {
+      return true;
+    }
+  }
+  return false;
+}
+
 var commonFilter=["McDonald's", "Burger King", "Jack in the Box", "Carl's Junior", "StarBucks", "Subway",
 "Pizza Hut", "Del Taco", "Taco Bell", "Chick-fil-A", "Farm", "Truck", "In-N-Out"];
 
@@ -164,16 +173,20 @@ module.exports.createTopResultsJSON = function(yelpResults, distance) {
     } else {
       //compare ratings
       for(var k = 0; k < topResults.length; k++){
-        //Check rating
-        if(allBusinesses[j].rating > topResults[k].rating){
-          topResults[k] = allBusinesses[j];
-          //once a business is added to topResults, move on to the next business
-          break;
-        //if ratings are equal, choose the business with higher number of reviews
-        } else if(allBusinesses[j].rating === topResults[k].rating && allBusinesses[j].review_count > topResults[k].review_count){
-          topResults[k] = allBusinesses[j];
-          //once a business is added to topResults, move on to the next business
-          break;
+        // if the business is not already in the topResults;
+        // if not in the topResults, then proceed with comparing, else, skip the current business entry
+        if (!isAlreadyInArray(topResults, allBusinesses[j])) {
+          //Check rating
+          if(allBusinesses[j].rating > topResults[k].rating){
+            topResults[k] = allBusinesses[j];
+            //once a business is added to topResults, move on to the next business
+            break;
+            //if ratings are equal, choose the business with higher number of reviews
+          } else if(allBusinesses[j].rating === topResults[k].rating && allBusinesses[j].review_count > topResults[k].review_count){
+            topResults[k] = allBusinesses[j];
+            //once a business is added to topResults, move on to the next business
+            break;
+          }
         }
       }
     }
