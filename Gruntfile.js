@@ -2,23 +2,23 @@ module.exports = function(grunt){
 
   grunt.initConfig({
     jshint: {
-      all: ['Gruntfile.js', 'client/app/*.js', 'server/**/*.js', 'test/**/*.js']
+      files: ['Gruntfile.js', 'client/app/*.js']
     },
-
+    //'Gruntfile.js', 'client/app/*.js', 'server/**/*.js', 'test/**/*.js'
     concat: {
       options: {
         separator: ';'
       },
       dist: {
-        src: ['server/**/*.js', 'client/**/*.js'],
-        dest: 'dist/built.js'
+        src: ['client/app/**/*.js'],
+        dest: 'client/dist/built.js'
       }
     },
 
     uglify: {
       target: {
         files: {
-          'dist/built.min.js': ['dist/built.js']
+          'client/dist/built.min.js': ['client/dist/built.js']
         }
       }
     }
@@ -27,6 +27,10 @@ module.exports = function(grunt){
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+
+  grunt.registerTask('lint', [
+    'jshint'
+  ]);
 
   grunt.registerTask('default', [
     'jshint',
