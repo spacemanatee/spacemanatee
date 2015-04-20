@@ -48,3 +48,20 @@ h1 span {
   text-align: center;
   padding-bottom:10px;
 }
+
+.oddTop10 {
+  background-image:url('../images/travel.jpg');
+  background-size: 50%, 50%;
+}
+
+.evenTop10 {
+  background-image:url('../images/food.png');
+}
+
+table {
+  table-layout: fixed;
+}
+
+#topTenList {
+  border: 1px solid #999999;;
+}

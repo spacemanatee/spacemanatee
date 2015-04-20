@@ -216,7 +216,8 @@ module.exports.createTopResultsJSON = function(yelpResults, distance) {
   var finalResults = evenSpreadResults.concat(topResults);
 
   var result = {
-    results: finalResults
+    results: finalResults,
+    topTen: topResults
   };
   return result;
 }
