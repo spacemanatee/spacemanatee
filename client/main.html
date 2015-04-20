@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" ng-app='app' ng-controller="mapCtrl">
+  <head>
+    <title>Road Trip Advisor</title>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" type="text/css" href="styles/style.css" />
+    <link href='http://fonts.googleapis.com/css?family=Lobster|Rancho' rel='stylesheet' type='text/css'>
+
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
+    <script type="text/javascript">
+
+      var map;
+      var directionsDisplay;
+      var markerArray = [];
+      var stepDisplay;
+
+      function initialize() {
+
+        var mapOptions = {
+          center: { lat: 37.82, lng: -122.30},
+          zoom: 10,
+          disableDefaultUI:true
+        };
+
+        map = new google.maps.Map(document.getElementById('map-canvas'),
+            mapOptions);
+
+        var input1 = document.getElementById('start');
+        var input2 = document.getElementById('end');
+
+        var autocomplete1 = new google.maps.places.Autocomplete(input1, null);
+        var autocomplete2 = new google.maps.places.Autocomplete(input2, null);
+
+        directionsDisplay = new google.maps.DirectionsRenderer();
+        stepDisplay = new google.maps.InfoWindow();
+
+        directionsDisplay.setMap(map);
+      }
+
+      google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+
+  </head>
+  <body>
+    <h1 id="title">Road Trip <span>Advisor</span></h1>
+
+    <div id='journey'>
+      <form name="submitForm" autofill-submit='submit()'>
+        <input type='text' autofill class="submissionfield" id="start" placeholder="Starting location..." ng-model='location.start'>
+        <input type="text" autofill class="submissionfield" id="end" placeholder="Destination..." ng-model='location.end'><br><br>
+        <select name="serviceSelect" ng-model='optionFilter' ng-options="option.value as option.name for option in optionSelections"></select>
+        <button>Let's Go!</button>
+      </form>
+    </div><br><br>
+
+    <div id="map-canvas"></div><br><br><br>
+
+
+    <script src="lib/angular/angular.js"></script>
+    <script src="lib/angular-route/angular-route.js"></script>
+    <script src="lib/autofill-directive/autofill-directive.js"></script>
+
+    <script src="app/app.js"></script>
+
+  </body>
+</html>
