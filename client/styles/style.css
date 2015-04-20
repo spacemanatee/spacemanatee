@@ -81,3 +81,13 @@ table {
   padding: 5px;
   font-size: 1.2em;
 }
+
+#warningMsg {
+  margin-left: 20%;
+  margin-right: 20%;
+  vertical-align: middle;
+  text-align: center;
+  font-size: 2.4em;
+  font-family: 'Rancho', helvetica, arial;
+  color: red;
+}
