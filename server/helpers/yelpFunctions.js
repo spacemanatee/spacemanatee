@@ -78,12 +78,17 @@ function trimGoogleCoord(googleCoords, distance) {
   var trimmedCoords = [];
   //Loop through array and only push the coordinates that are distanceBetweenQueries apart
 
-  for (var i = 0; i < googleCoords.length; i++) {
-    if (calcDistance(parseGoogleCoord(googleCoords[i]), parseGoogleCoord(googleCoords[0])) >= distance / 20 &&
-      calcDistance(parseGoogleCoord(googleCoords[i]), parseGoogleCoord(googleCoords[googleCoords.length - 1])) >= distance / 20) {
-      trimmedCoords.push(googleCoords[i]);
+  if (googleCoords.length > 5) {
+    for (var i=0; i<googleCoords.length; i++) {
+      if (calcDistance(parseGoogleCoord(googleCoords[i]), parseGoogleCoord(googleCoords[0])) >= distance/20 &&
+        calcDistance(parseGoogleCoord(googleCoords[i]), parseGoogleCoord(googleCoords[googleCoords.length-1])) >= distance/20) {
+        trimmedCoords.push(googleCoords[i]);
+      }
     }
+  } else {
+    trimmedCoords = googleCoords;
   }
+
   return trimmedCoords;
 }
 
@@ -99,6 +104,13 @@ module.exports.searchYelp = function (req, res, googleCoords, distance, callback
   // yelp search parameter configuration
   yelpProperty.term = req.body.optionFilter;           // Type of business (food, restaurants, bars, hotels, etc.)
 
+  if (distance <= 20) {
+    yelpProperty.radius_filter = 0.8*1609.34 ;
+  } else if (distance <= 40) {
+    yelpProperty.radius_filter = 2.5*1609.34;
+  } else {
+    yelpProperty.radius_filter = 5*1609.34;
+  }
 
   //Request yelp for each point along route that is returned by filterGoogle.js
   for(var i = 0; i < trimmedCoords.length; i++){
