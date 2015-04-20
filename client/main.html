@@ -56,22 +56,24 @@
     </div><br><br>
 
     <div id="map-canvas"></div><br><br><br>
-    <div id="topTen" style="margin-left: 20%;margin-right: 20%;vertical-align: middle;"> 
-      <div style=>Here's our Top 10 favorite spots along the journey! </div><br>
+    <div id="topTen" style="margin-left: 20%;margin-right: 20%;vertical-align: middle;text-align: center;"> 
+      <div><h1 style="font-family: 'Rancho', helvetica, arial;">Here's our Top 10 favorite spots along the journey! </h1></div><br>
       <div ng-if="!!topTen">
         <div ng-repeat= "top in topTen" style="border-style: solid; border-width: 1px;">
-        <div>
-        <table>
+        <div ng-class="{'oddTop10': $odd , 'evenTop10': $even}">
+        <table width ="800px">
           <tr>
-            <td><img ng-src='{{top["image_url"] ? top["image_url"] : "./images/default.jpg"}}' alt="Sites image not yet available" /></td>
-            <td><div>{{top.name}} </div></td>
-            <td><img ng-src='{{top["rating_img_url"]}}' alt="rating not yet available" /></td>
-            <td><a ng-href='{{top["url"]}}' target="_blank"> Visit on Yelp</a></td>
+            <td width="200px"><img ng-src='{{top["image_url"] ? top["image_url"] : "./images/default.jpg"}}' alt="Sites image not yet available" /></td>
+            <td width="200px"><div style="font-family: 'Rancho', helvetica, arial;">{{top.name}} </div></td>
+            <td width="200px"><img ng-src='{{top["rating_img_url"]}}' alt="rating not yet available" /></td>
+            <td width="200px"><a ng-href='{{top["url"]}}' target="_blank"> Visit on Yelp</a></td>
           </tr>
         </table>
         </div>
         </div>
       </div>
+      <br>
+      <br>
     </div>
 
 
