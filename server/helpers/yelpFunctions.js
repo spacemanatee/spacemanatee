@@ -87,90 +87,174 @@ module.exports.searchYelp = function (req, res, googleCoords, distance, callback
   }
 };
 
+//--------------START NEW ALGO-----------------//
+
+
 //Filter results returned from Yelp into an overall top 10
 module.exports.createTopResultsJSON = function(yelpResults, distance) {
   var allBusinesses = [];
   var topResults = [];
-  var minRating = 0;
-  var evenSpreadResults =[];
+  var invalidBusinesses = [];
+  var invalidLength;
+  var remainingBusinesses = [];
 
-  //Push all businesses from yelpResults into one array for easy filtering
+  // push all businesses from yelpResults into array
   for(var i = 0; i < yelpResults.length; i++){
     if(yelpResults[i].businesses){
       allBusinesses = allBusinesses.concat(yelpResults[i].businesses);
     }
   }
-  //loop through each business and compare ratings, only push the overall top 10 into topResults
-  for(var j = 0;j < allBusinesses.length; j++){
-    //yelp includes some highly rated businesses well outside of the search radius, possibly a "featured business"
-    //if such a business is included, skip over it
-    if(allBusinesses[j].distance > yelpProperty.radius_filter){
-      continue;
+  var allLength = allBusinesses.length;
+  console.log('ALL BIZ LENGTH: ', allLength);
+  console.log('INVALID LENGTH: ', invalidLength);
+
+  for (var i = 0 ; i < allBusinesses.length; i++){
+    // set those outside the search radius to be discarded
+    if (allBusinesses[i].distance > yelpProperty.radius_filter){
+      invalidBusinesses.push(allBusinesses[i]);
     }
-    //Push the first 10 businesses into topResults
-    if(topResults.length < 10){
-      topResults.push(allBusinesses[j]);
-    } else {
-      //compare ratings
-      for(var k = 0; k < topResults.length; k++){
-        // if the business is not already in the topResults;
-        // if not in the topResults, then proceed with comparing, else, skip the current business entry
-        if (!isAlreadyInArray(topResults, allBusinesses[j])) {
-          //Check rating
-          if(allBusinesses[j].rating > topResults[k].rating){
-            topResults[k] = allBusinesses[j];
-            //once a business is added to topResults, move on to the next business
-            break;
-            //if ratings are equal, choose the business with higher number of reviews
-          } else if(allBusinesses[j].rating === topResults[k].rating && allBusinesses[j].review_count > topResults[k].review_count){
-            topResults[k] = allBusinesses[j];
-            //once a business is added to topResults, move on to the next business
-            break;
-          }
+  }
+
+  invalidLength = invalidBusinesses.length;
+  console.log('INVALID LENGTH: ', invalidLength);
+
+  for (var i = 0 ; i < allBusinesses.length; i++){
+    // if remaining businesses > 10, set those with fewer than 4 stars to be discarded
+    if (allLength - invalidLength > 10 && allBusinesses[i].rating < 4 ){
+      invalidBusinesses.push(allBusinesses[i]);
+    }
+  }
+
+  invalidLength = invalidBusinesses.length;
+  console.log('INVALID LENGTH: ', invalidLength);
+
+  for (var i = 0 ; i < allBusinesses.length; i++){
+    // if remaining businesses > 10, set those with fewer than 5 reviews to be discarded
+    if (allLength - invalidLength > 10 && allBusinesses[i].review_count < 5){
+      invalidBusinesses.push(allBusinesses[i]);
+    }
+  }
+
+  invalidLength = invalidBusinesses.length;
+  console.log('INVALID LENGTH: ', invalidLength);
+
+  // remove invalid businesses
+  for (var i = 0 ; i < allLength ; i++){
+    var valid = true;
+    for (var j = 0 ; j < invalidLength ; i++){
+      if (allBusinesses[i].id === invalidBusinesses[j].id){
+        var valid = false;
+      }
+    }
+    if (allBusinesses[i].valid === true){
+      remainingBusinesses.push(allBusinesses[i]);
+    }
+  }
+
+  // sort remaining results based on rating
+  remainingBusinesses.sort(function compareNumbers(a, b) {
+  return b - a;
+  })
+
+  // loop from highest to lowest
+  for (var i = 0 ; i < remainingBusinesses.length ; i++){
+    if (topResults.length < 10){
+      var pushIt = true;
+      for (var j = 0 ; j < topResults.length ; j++){
+        if (coord.calcDistance(remainingBusinesses[i], topResults[j]) < (distance / 20) ){
+          pushIt = false;
         }
       }
-    }
-  }
-
-  // start the evenSpread algorithm to create a new array of results, which will be combined later with the topResults
-  var startingCoord;  // keep track of starting coordinates
-  evenSpreadResults[0] = allBusinesses[1]; // push the starting point result to the array
-  var n = 0;
-
-  for (var m = 1; m < allBusinesses.length; m) {
-    // if next waypoint less than total distance/20 mi away
-    if (coord.calcDistance(evenSpreadResults[n], allBusinesses[m]) < (distance / 20)) {
-      // then skip
-      m++;
-    }
-    else { // if the next waypoint is greater than distance/20 mi away
-      if (allBusinesses[m].distance > yelpProperty.radius_filter || allBusinesses[m].rating < 4 ||
-        allBusinesses[m].review_count < 5 || isCommonPlace(allBusinesses[m], commonFilter)) {
-        // if the business distance is out of the searching radius,
-        // or if the rating is less than 4
-        // or if the review count is less than 5
-        // or if the place is deemed a common place deemed by the commonFilter
-        // then skip
-        m++;
-      }
-      else {
-        // push the result to the array, start looking for the next entry
-        n++;
-        evenSpreadResults[n] = allBusinesses[m];
-        m++;
+      if (pushIt === true){
+        topResults.push(remainingBusinesses[i]);
+        console.log('PUSH');
       }
     }
-    if (n >= 20 || m >= allBusinesses.length) { // if have 20 entries , exit the for loop
-      break;
-    }
   }
-
-  // combine the best results along the road with the even spread results along the roads
-  var finalResults = evenSpreadResults.concat(topResults);
 
   var result = {
-    results: finalResults,
+    results: [],
     topTen: topResults
   };
+
+  console.log('RESULT: ', result);
   return result;
-}
+
+};
+
+//-------------END NEW ALGO---------------//
+
+//   //loop through each business and compare ratings, only push the overall top 10 into topResults
+//   for(var j = 0;j < allBusinesses.length; j++){
+//     //yelp includes some highly rated businesses well outside of the search radius, possibly a "featured business"
+//     //if such a business is included, skip over it
+//     if(allBusinesses[j].distance > yelpProperty.radius_filter){
+//       continue;
+//     }
+//     //Push the first 10 businesses into topResults
+//     if(topResults.length < 10){
+//       topResults.push(allBusinesses[j]);
+//     } else {
+//       //compare ratings
+//       for(var k = 0; k < topResults.length; k++){
+//         // if the business is not already in the topResults;
+//         // if not in the topResults, then proceed with comparing, else, skip the current business entry
+//         if (!isAlreadyInArray(topResults, allBusinesses[j])) {
+//           //Check rating
+//           if(allBusinesses[j].rating > topResults[k].rating){
+//             topResults[k] = allBusinesses[j];
+//             //once a business is added to topResults, move on to the next business
+//             break;
+//             //if ratings are equal, choose the business with higher number of reviews
+//           } else if(allBusinesses[j].rating === topResults[k].rating && allBusinesses[j].review_count > topResults[k].review_count){
+//             topResults[k] = allBusinesses[j];
+//             //once a business is added to topResults, move on to the next business
+//             break;
+//           }
+//         }
+//       }
+//     }
+//   }
+
+//   // start the evenSpread algorithm to create a new array of results, which will be combined later with the topResults
+//   var startingCoord;  // keep track of starting coordinates
+//   evenSpreadResults[0] = allBusinesses[1]; // push the starting point result to the array
+//   var n = 0;
+
+//   for (var m = 1; m < allBusinesses.length; m) {
+//     // if next waypoint less than total distance/20 mi away
+//     if (coord.calcDistance(evenSpreadResults[n], allBusinesses[m]) < (distance / 20)) {
+//       // then skip
+//       m++;
+//     }
+//     else { // if the next waypoint is greater than distance/20 mi away
+//       if (allBusinesses[m].distance > yelpProperty.radius_filter || allBusinesses[m].rating < 4 ||
+//         allBusinesses[m].review_count < 5 || isCommonPlace(allBusinesses[m], commonFilter)) {
+//         // if the business distance is out of the searching radius,
+//         // or if the rating is less than 4
+//         // or if the review count is less than 5
+//         // or if the place is deemed a common place deemed by the commonFilter
+//         // then skip
+//         m++;
+//       }
+//       else {
+//         // push the result to the array, start looking for the next entry
+//         n++;
+//         evenSpreadResults[n] = allBusinesses[m];
+//         m++;
+//       }
+//     }
+//     if (n >= 20 || m >= allBusinesses.length) { // if have 20 entries , exit the for loop
+//       break;
+//     }
+//   }
+
+//   // combine the best results along the road with the even spread results along the roads
+//   var finalResults = evenSpreadResults.concat(topResults);
+
+//   var result = {
+//     results: finalResults,
+//     topTen: topResults
+//   };
+//   return result;
+// }
