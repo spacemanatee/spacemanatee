@@ -1,6 +1,6 @@
 var passport = require('passport')
   , FacebookStrategy = require('passport-facebook').Strategy
-  , key = require('./api/api_key');
+  , key = require('../api/api_key').fb;
 
 passport.serializeUser(function(user, done) {
   done(null, user);
@@ -16,7 +16,7 @@ passport.use(new FacebookStrategy({
     callbackURL: "http://localhost:3456/main/auth/success"
   },
   function(accessToken, refreshToken, profile, done) {
-    
+
     console.log('logged in ', arguments);
     done(null, profile);
   }
