@@ -108,7 +108,7 @@ module.exports.createTopResultsJSON = function(yelpResults, distance) {
   console.log('ALL BIZ LENGTH: ', allLength);
   console.log('INVALID LENGTH: ', invalidLength);
 
-  for (var i = 0 ; i < allBusinesses.length; i++){
+  for (var i = 0 ; i < allLength; i++){
     // set those outside the search radius to be discarded
     if (allBusinesses[i].distance > yelpProperty.radius_filter){
       invalidBusinesses.push(allBusinesses[i]);
@@ -118,7 +118,7 @@ module.exports.createTopResultsJSON = function(yelpResults, distance) {
   invalidLength = invalidBusinesses.length;
   console.log('INVALID LENGTH: ', invalidLength);
 
-  for (var i = 0 ; i < allBusinesses.length; i++){
+  for (var i = 0 ; i < allLength; i++){
     // if remaining businesses > 10, set those with fewer than 4 stars to be discarded
     if (allLength - invalidLength > 10 && allBusinesses[i].rating < 4 ){
       invalidBusinesses.push(allBusinesses[i]);
@@ -128,7 +128,7 @@ module.exports.createTopResultsJSON = function(yelpResults, distance) {
   invalidLength = invalidBusinesses.length;
   console.log('INVALID LENGTH: ', invalidLength);
 
-  for (var i = 0 ; i < allBusinesses.length; i++){
+  for (var i = 0 ; i < allLength; i++){
     // if remaining businesses > 10, set those with fewer than 5 reviews to be discarded
     if (allLength - invalidLength > 10 && allBusinesses[i].review_count < 5){
       invalidBusinesses.push(allBusinesses[i]);
@@ -137,16 +137,21 @@ module.exports.createTopResultsJSON = function(yelpResults, distance) {
 
   invalidLength = invalidBusinesses.length;
   console.log('INVALID LENGTH: ', invalidLength);
+  console.log('ALL BIZ LENGTH: ', allLength);
 
   // remove invalid businesses
   for (var i = 0 ; i < allLength ; i++){
     var valid = true;
-    for (var j = 0 ; j < invalidLength ; i++){
+    for (var j = 0 ; j < invalidLength ; j++){
+      console.log('ALL BIZ LENGTH: ', allLength);
+      console.log('I ITERATOR: ', i);
+      // console.log('ALLBIZ-I: ', allBusinesses[i]);
+      // console.log('INVALID-J: ', invalidBusinesses[j]);
       if (allBusinesses[i].id === invalidBusinesses[j].id){
         var valid = false;
       }
     }
-    if (allBusinesses[i].valid === true){
+    if (valid === true){
       remainingBusinesses.push(allBusinesses[i]);
     }
   }
