@@ -48,11 +48,11 @@
         disableDefaultUI:true
       };
 
-      map = new google.maps.Map(document.getElementById('map-canvas'),
+      map = new google.maps.Map(document.getElementById("map-canvas"),
           mapOptions);
 
-      var input1 = document.getElementById('start');
-      var input2 = document.getElementById('end');
+      var input1 = document.getElementById("start");
+      var input2 = document.getElementById("end");
 
       var autocomplete1 = new google.maps.places.Autocomplete(input1, null);
       var autocomplete2 = new google.maps.places.Autocomplete(input2, null);
@@ -63,7 +63,7 @@
       directionsDisplay.setMap(map);
     }
 
-    google.maps.event.addDomListener(window, 'load', initialize);
+    google.maps.event.addDomListener(window, "load", initialize);
 
   </script>
 
@@ -102,7 +102,7 @@
       <div class="col-lg-12">
         <h1 class="title">Plan your trip</h1>
         <div id='journey'>
-          <form class="navbar-form navbar-center" name="submitForm" autofill-submit='submit()'>
+          <form class="navbar-form navbar-center" name="submitForm" autofill-submit="submit()">
 
             <div class="form-group">
               <input type="text" autofill class="form-control submissionfield" id="start" placeholder="Starting location..." ng-model="location.start">
@@ -129,7 +129,7 @@
 
                 <img ng-src='{{top["image_url"] ? top["image_url"] : "./images/default.jpg"}}' alt="Sites image not yet available" style="float:left;padding:5px;"/><br>
                 <div style="padding:5px 0 0 0">
-                  <div style="font-family: 'Rancho', helvetica, arial;font-size:1.5em;padding-bottom:10px;">{{top.name}} </div>
+                  <div style="font-family: "Rancho", helvetica, arial;font-size:1.5em;padding-bottom:10px;">{{top.name}} </div>
                   <img ng-src='{{top["rating_img_url"]}}' alt="rating not yet available" /><br>
                   <a ng-href='{{top["url"]}}' target="_blank"> Visit on Yelp</a>
                 </div>
