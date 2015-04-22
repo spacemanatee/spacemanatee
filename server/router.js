@@ -4,12 +4,25 @@ var router = express.Router();
 var path = require('path');
 var passport = require('./authentication/authentication');
 var loggedIn = require('./authentication/utility').loggedIn;
+var createFirebaseRef = require('./db/database');
 
 router.get('/main/auth', passport.authenticate('facebook'));
 router.get('/main/auth/success',
      passport.authenticate('facebook', {successRedirect:'/main',
                                         failureRedirect:'/main'}));
 
+
+
+router.get('/db', loggedIn, function(req, res) {
+  ref = createFirebaseRef();
+  //console.log("username", req.user);
+  var childRef = ref.child('Users');
+  var user = req.user.id;
+  childRef.child(user).set({'someone': "test"});
+
+
+  res.end('success');
+});
 
 router.post('/search', function(req, res) {
   console.log('(POST "/search") Now searching the Yelp API...');

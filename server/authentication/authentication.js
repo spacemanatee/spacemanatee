@@ -17,7 +17,6 @@ passport.use(new FacebookStrategy({
   },
   function(accessToken, refreshToken, profile, done) {
 
-    console.log('logged in ', arguments);
     done(null, profile);
   }
 ));
