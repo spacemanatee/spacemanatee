@@ -4,7 +4,7 @@ var app = express();
 var router = require('./server/router');
 
 //set port variable to deployed port or 3456 for local host
-var port = process.env.PORT || 3456;
+var port = process.env.PORT || 3000;
 
 //set dirname to client folder to serve static assets (index.html)
 app.use('/', express.static(__dirname + '/client'));

@@ -14,9 +14,9 @@ var filter = function(requestBody){
   // else, just query every 10 miles to filter the waypoint
   var distanceBetweenQueries;
   if (distance <= 20) {
-    distanceBetweenQueries = distance /10;
+    distanceBetweenQueries = distance/10;
   } else {
-    distanceBetweenQueries = 10;
+    distanceBetweenQueries = 20;
   }
 
   //Convert coordObj from an object to an array to calculate distance between points
