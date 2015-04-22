@@ -3,6 +3,8 @@ var bodyParser = require('body-parser');
 var app = express();
 var router = require('./server/router');
 var passport = require('./server/authentication');
+var cookieParser = require('cookie-parser');
+var session = require('express-session')
 
 //set port variable to deployed port or 3456 for local host
 var port = process.env.PORT || 3456;
@@ -11,9 +13,11 @@ var port = process.env.PORT || 3456;
 app.use('/', express.static(__dirname + '/client'));
 
 //parses all incoming data from strings to JSON
+app.use(cookieParser());
 app.use(bodyParser.json());
 
 //Send all calls to router function
+app.use(session({secret: "secret"}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(router);

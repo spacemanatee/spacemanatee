@@ -22,6 +22,19 @@ router.get('/main', function (req, res) {
   res.sendFile(path.join(__dirname,'../client', 'main.html'));
 });
 
+loggedIn = function(req, res, next) {
+    if (req.user) {
+        next();
+    } else {
+        res.redirect('/main/auth');
+    }
+}
+
+router.get('/authtest', loggedIn, function(req, res, next) {
+  console.log('user ', req.user);
+  res.end("success");
+});
+
 // router.post('/*', function(req, res) {
 //   console.log('POST to unknown page - redirecting to homepage.');
 //   res.redirect('/');

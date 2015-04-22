@@ -16,6 +16,7 @@ passport.use(new FacebookStrategy({
     callbackURL: "http://localhost:3456/main/auth/success"
   },
   function(accessToken, refreshToken, profile, done) {
+    
     console.log('logged in ', arguments);
     done(null, profile);
   }
