@@ -1,135 +1,158 @@
 <!DOCTYPE html>
 <html lang="en" ng-app='app' ng-controller="mapCtrl">
-  <head>
-    <title>Road Trip Advisor</title>
-    <meta charset="UTF-8">
+<head>
+  <title>Road Trip Advisor</title>
 
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
 
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <!-- Optional theme -->
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css"> -->
 
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+  <!-- Custom Fonts -->
+  <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster|Rancho|Lato:300,400,700,300italic,400italic,700italic">
 
-    <!-- Custom Fonts -->
-    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Lobster|Rancho|Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+  <link rel="stylesheet" href="styles/style.css">
 
+  <script src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
+  <script>
 
-    <link rel="stylesheet" type="text/css" href="styles/style.css" />
-    <link href='https://fonts.googleapis.com/css?family=Lobster|Rancho' rel='stylesheet' type='text/css'>
+    var map;
+    var directionsDisplay;
+    var markerArray = [];
+    var stepDisplay;
 
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
-    <script type="text/javascript">
+    function initialize() {
 
-      var map;
-      var directionsDisplay;
-      var markerArray = [];
-      var stepDisplay;
+      var mapOptions = {
+        center: { lat: 37.82, lng: -122.30},
+        zoom: 10,
+        disableDefaultUI:true
+      };
 
-      function initialize() {
+      map = new google.maps.Map(document.getElementById("map-canvas"),
+          mapOptions);
 
-        var mapOptions = {
-          center: { lat: 37.82, lng: -122.30},
-          zoom: 10,
-          disableDefaultUI:true
-        };
+      var input1 = document.getElementById("start");
+      var input2 = document.getElementById("end");
 
-        map = new google.maps.Map(document.getElementById('map-canvas'),
-            mapOptions);
+      var autocomplete1 = new google.maps.places.Autocomplete(input1, null);
+      var autocomplete2 = new google.maps.places.Autocomplete(input2, null);
 
-        var input1 = document.getElementById('start');
-        var input2 = document.getElementById('end');
+      directionsDisplay = new google.maps.DirectionsRenderer();
+      stepDisplay = new google.maps.InfoWindow();
 
-        var autocomplete1 = new google.maps.places.Autocomplete(input1, null);
-        var autocomplete2 = new google.maps.places.Autocomplete(input2, null);
+      directionsDisplay.setMap(map);
+    }
 
-        directionsDisplay = new google.maps.DirectionsRenderer();
-        stepDisplay = new google.maps.InfoWindow();
+    google.maps.event.addDomListener(window, "load", initialize);
 
-        directionsDisplay.setMap(map);
-      }
+  </script>
 
-      google.maps.event.addDomListener(window, 'load', initialize);
+</head>
 
-    </script>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar navbar-default navbar-fixed-top topnav" role="navigation">
+    <div class="container topnav">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand topnav" href="/"><span class="logo-1">Road Trip</span> <span class="logo-2">Advisor</span></a>
+      </div>
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <a href="/#features">About</a>
+          </li>
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+  </nav>
 
-  </head>
-  <body>
+  <div class="container-fluid main-content">
 
-    <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <h1 class="title">Plan your trip</h1>
+        <div id='journey'>
+          <form class="navbar-form navbar-center" name="submitForm" autofill-submit="submit()">
 
-      <div class="row">
-        <div class="col-lg-12">
+            <div class="form-group">
+              <input type="text" autofill class="form-control submissionfield" id="start" placeholder="Starting location..." ng-model="location.start">
+              <input type="text" autofill class="form-control submissionfield" id="end" placeholder="Destination..." ng-model="location.end">
+            </div><br>
+            <select name="serviceSelect" ng-model="optionFilter" ng-options="option.value as option.name for option in optionSelections" class="form-control" id="sel1"></select>
+            <button type="submit" class="btn btn-primary navbar-btn">Let's Go!</button>&nbsp;&nbsp;&nbsp;&nbsp;
+          </form>
+        </div>
+      </div><!-- col-lg-12 -->
+    </div><!-- row -->
 
-          <h1 id="title">Road Trip <span>Advisor</span></h1>
+    <div id="warningMsg"></div></div>
+    <main-area></main-area>
+    <div id="map-canvas"></div><br>
 
-          <div id='journey'>
-            <form class="navbar-form navbar-center" name="submitForm" autofill-submit='submit()'>
+    <div class="row">
+      <div class="col-lg-12">
+        <div id="topTen" style="margin-left: 20%;margin-right: 20%;vertical-align: middle;text-align: center;">
+          <div ng-if="!!topTen" ng-model="topTen">
+            <h1>Here's our Top 10 favorite spots along the journey! </h1><br>
+            <div ng-repeat= "top in topTen" id="topTenList">
+              <div ng-class="{'oddTop10': $odd , 'evenTop10': $even}">
 
-              <div class="form-group">
-                <input type="text" autofill class="form-control submissionfield" id="start" placeholder="Starting location..." ng-model="location.start">
-                <input type="text" autofill class="form-control submissionfield" id="end" placeholder="Destination..." ng-model="location.end">
-              </div><br>
-              <select name="serviceSelect" ng-model="optionFilter" ng-options="option.value as option.name for option in optionSelections" class="form-control" id="sel1"></select>
-              <button type="submit" class="btn btn-default navbar-btn">Let's Go!</button>&nbsp;&nbsp;&nbsp;&nbsp;
-            </form>
-          </div>
-        </div><!-- col-lg-12 -->
-      </div><!-- row -->
-
-      <div id="warningMsg"></div></div>
-      <main-area></main-area>
-      <div id="map-canvas"></div><br>
-
-      <div class="row">
-        <div class="col-lg-12">
-          <div id="topTen" style="margin-left: 20%;margin-right: 20%;vertical-align: middle;text-align: center;">
-            <div ng-if="!!topTen" ng-model="topTen">
-              <h1>Here's our Top 10 favorite spots along the journey! </h1><br>
-              <div ng-repeat= "top in topTen" id="topTenList">
-                <div ng-class="{'oddTop10': $odd , 'evenTop10': $even}">
-
-                  <img ng-src='{{top["image_url"] ? top["image_url"] : "./images/default.jpg"}}' alt="Sites image not yet available" style="float:left;padding:5px;"/><br>
-                  <div style="padding:5px 0 0 0">
-                    <div style="font-family: 'Rancho', helvetica, arial;font-size:1.5em;padding-bottom:10px;">{{top.name}} </div>
-                    <img ng-src='{{top["rating_img_url"]}}' alt="rating not yet available" /><br>
-                    <a ng-href='{{top["url"]}}' target="_blank"> Visit on Yelp</a>
-                  </div>
-                  <br clear="all">
-
+                <img ng-src='{{top["image_url"] ? top["image_url"] : "./images/default.jpg"}}' alt="Sites image not yet available" style="float:left;padding:5px;"/><br>
+                <div style="padding:5px 0 0 0">
+                  <div style="font-family: "Rancho", helvetica, arial;font-size:1.5em;padding-bottom:10px;">{{top.name}} </div>
+                  <img ng-src='{{top["rating_img_url"]}}' alt="rating not yet available" /><br>
+                  <a ng-href='{{top["url"]}}' target="_blank"> Visit on Yelp</a>
                 </div>
+                <br clear="all">
+
               </div>
             </div>
-            <br>
-            <br>
           </div>
+          <br>
+          <br>
+        </div>
 
-        </div><!-- col-lg-12 -->
-      </div><!-- row -->
+      </div><!-- col-lg-12 -->
+    </div><!-- row -->
 
-    </div><!-- container-fluid -->
+  </div><!-- container-fluid -->
 
-    <script src="lib/angular/angular.js"></script>
-    <script src="lib/angular-route/angular-route.js"></script>
-    <script src="lib/autofill-directive/autofill-directive.js"></script>
+  <script src="lib/angular/angular.js"></script>
+  <script src="lib/angular-route/angular-route.js"></script>
+  <script src="lib/autofill-directive/autofill-directive.js"></script>
 
-    <script src="app/service.js"></script>
-    <script src="app/app.js"></script>
+  <script src="app/service.js"></script>
+  <script src="app/app.js"></script>
 
-  </body>
+</body>
 </html>
