@@ -13,7 +13,11 @@ router.get('/main/auth/success',
 
 
 
-router.get('/db', loggedIn, function(req, res) {
+router.get('/login', loggedIn, function(req, res){
+  res.redirect('/home');
+})
+
+router.post('/db', loggedIn, function(req, res) {
   ref = createFirebaseRef();
   //console.log("username", req.user);
   var childRef = ref.child('Users');
