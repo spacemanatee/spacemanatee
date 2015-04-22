@@ -105,8 +105,6 @@ module.exports.createTopResultsJSON = function(yelpResults, distance) {
     }
   }
   var allLength = allBusinesses.length;
-  console.log('ALL BIZ LENGTH: ', allLength);
-  console.log('INVALID LENGTH: ', invalidLength);
 
   for (var i = 0 ; i < allLength; i++){
     // set those outside the search radius to be discarded
@@ -116,7 +114,6 @@ module.exports.createTopResultsJSON = function(yelpResults, distance) {
   }
 
   invalidLength = invalidBusinesses.length;
-  console.log('INVALID LENGTH: ', invalidLength);
 
   for (var i = 0 ; i < allLength; i++){
     // if remaining businesses > 10, set those with fewer than 4 stars to be discarded
@@ -126,7 +123,6 @@ module.exports.createTopResultsJSON = function(yelpResults, distance) {
   }
 
   invalidLength = invalidBusinesses.length;
-  console.log('INVALID LENGTH: ', invalidLength);
 
   for (var i = 0 ; i < allLength; i++){
     // if remaining businesses > 10, set those with fewer than 5 reviews to be discarded
@@ -136,17 +132,11 @@ module.exports.createTopResultsJSON = function(yelpResults, distance) {
   }
 
   invalidLength = invalidBusinesses.length;
-  console.log('INVALID LENGTH: ', invalidLength);
-  console.log('ALL BIZ LENGTH: ', allLength);
 
   // remove invalid businesses
   for (var i = 0 ; i < allLength ; i++){
     var valid = true;
     for (var j = 0 ; j < invalidLength ; j++){
-      console.log('ALL BIZ LENGTH: ', allLength);
-      console.log('I ITERATOR: ', i);
-      // console.log('ALLBIZ-I: ', allBusinesses[i]);
-      // console.log('INVALID-J: ', invalidBusinesses[j]);
       if (allBusinesses[i].id === invalidBusinesses[j].id){
         var valid = false;
       }
@@ -172,17 +162,15 @@ module.exports.createTopResultsJSON = function(yelpResults, distance) {
       }
       if (pushIt === true){
         topResults.push(remainingBusinesses[i]);
-        console.log('PUSH');
       }
     }
   }
 
   var result = {
-    results: [],
+    results: topResults,
     topTen: topResults
   };
 
-  console.log('RESULT: ', result);
   return result;
 
 };
