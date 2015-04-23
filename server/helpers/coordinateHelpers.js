@@ -26,34 +26,3 @@ module.exports.calcDistance = function(pt1, pt2) {
   return distance;
 }
 
-// parse google coordinate into {latitude:..., longitude: ... } format
-module.exports.parseGoogleCoord = function(googleCoord) {
-  var latitude = parseFloat(googleCoord.match(/^.*,/)[0].replace(",", ""));
-  var longitude = parseFloat(googleCoord.match(/,.*$/)[0].replace(",", ""));
-  var obj = {
-    location: {
-      coordinate : {
-        latitude: latitude,
-        longitude: longitude
-      }
-    }
-  }
-  return obj;
-}
-
-// trim the google waypoint coordinate to take out start and end way point so no clustering at 2 ends.
-module.exports.trimGoogleCoord = function(googleCoords, distance) {
-  var trimmedCoords = [];
-  //Loop through array and only push the coordinates that are distanceBetweenQueries apart
-  if (googleCoords.length > 5) {
-    for (var i = 0; i < googleCoords.length; i++) {
-      if (module.exports.calcDistance(module.exports.parseGoogleCoord(googleCoords[i]), module.exports.parseGoogleCoord(googleCoords[0])) >= distance / 20 &&
-        module.exports.calcDistance(module.exports.parseGoogleCoord(googleCoords[i]), module.exports.parseGoogleCoord(googleCoords[googleCoords.length - 1])) >= distance / 20) {
-        trimmedCoords.push(googleCoords[i]);
-      }
-    }
-  } else {
-    trimmedCoords = googleCoords;
-  }
-  return trimmedCoords;
-}
