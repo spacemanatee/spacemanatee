@@ -1,6 +1,4 @@
 angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
-
-<<<<<<< HEAD
 .controller('mapCtrl', ['$scope', '$element', 'Maps', 'Utility', function($scope, $element, Maps, Utility) {
   // initialize the user input option selector
   $scope.optionSelections = [
@@ -40,141 +38,141 @@ angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
     }
   };
 
-  $scope.submit = function(city) {
-    $scope.geoCodeNotSuccessful = false;  // every time when submit button is pressed, reset the geoCodeNotSuccessful to false
-    $element.find("main-area").empty();   // clear out the warning messages from previous location input
-    var startGeo, endGeo;
+$scope.submit = function(city) {
+  $scope.geoCodeNotSuccessful = false;  // every time when submit button is pressed, reset the geoCodeNotSuccessful to false
+  $element.find("main-area").empty();   // clear out the warning messages from previous location input
+  var startGeo, endGeo;
 
-    calcRoute();
+  calcRoute();
 
-    function calcRoute() {
-      // New directionsService object to interact with google maps API
-      var directionsService = new google.maps.DirectionsService();
-      // clear markers whenever new search
-      for (var i = 0; i < markerArray.length; i++) {
-        markerArray[i].setMap(null);
-      }
+  function calcRoute() {
+    // New directionsService object to interact with google maps API
+    var directionsService = new google.maps.DirectionsService();
+    // clear markers whenever new search
+    for (var i = 0; i < markerArray.length; i++) {
+      markerArray[i].setMap(null);
+    }
 
-      // create object to send to Google to generate directions
-      var request = {
-        origin: $scope.location.start,
-        destination: $scope.location.end,
-        travelMode: google.maps.TravelMode.DRIVING
-      };
+    // create object to send to Google to generate directions
+    var request = {
+      origin: $scope.location.start,
+      destination: $scope.location.end,
+      travelMode: google.maps.TravelMode.DRIVING
+    };
 
-      //send request to Google Maps Directions API with request object as data
-      directionsService.route(request, function(response, status) {
-        // successfully get the direction based on locations
-        if (status === google.maps.DirectionsStatus.OK) {
-          $scope.geoCodeNotSuccessful=false;
-          // update the map on index.html
-          directionsDisplay.setDirections(response);
+    //send request to Google Maps Directions API with request object as data
+    directionsService.route(request, function(response, status) {
+      // successfully get the direction based on locations
+      if (status === google.maps.DirectionsStatus.OK) {
+        $scope.geoCodeNotSuccessful=false;
+        // update the map on index.html
+        directionsDisplay.setDirections(response);
 
-          // if polyline from previous search, remove it
-          if (!!polyline){
-            polyline.setmap(null);
-          }
+        // if polyline from previous search, remove it
+        if (!!polyline){
+          polyline.setmap(null);
+        }
 
-          var polyline = new google.maps.Polyline({
-            path: [],
-            strokeColor: '#FF0000',
-            strokeWeight: 0
-          });
+        var polyline = new google.maps.Polyline({
+          path: [],
+          strokeColor: '#FF0000',
+          strokeWeight: 0
+        });
 
-          var bounds = new google.maps.LatLngBounds();
+        var bounds = new google.maps.LatLngBounds();
 
-          // - new google filtering - //
+        // - new google filtering - //
 
-          // convert metric distance to miles
+        // convert metric distance to miles
 
-          distance = response.routes[0].legs[0].distance.value/1609.34;
+        distance = response.routes[0].legs[0].distance.value/1609.34;
 
-          // determine the distance between queries
-          var distanceBetweenQueries;
+        // determine the distance between queries
+        var distanceBetweenQueries;
 
-          if (distance <= 20) {
-            distanceBetweenQueries = distance/10;
-          } else if (distance <= 500) {
-            distanceBetweenQueries = distance/20;
-          } else if (distance <= 1500) {
-            // default to yelp's max radius (25mi)
-            distanceBetweenQueries = 25;
-          } else {
-            // optimize
-            distanceBetweenQueries = 50;
-          }
+        if (distance <= 20) {
+          distanceBetweenQueries = distance/10;
+        } else if (distance <= 500) {
+          distanceBetweenQueries = distance/20;
+        } else if (distance <= 1500) {
+          // default to yelp's max radius (25mi)
+          distanceBetweenQueries = 25;
+        } else {
+          // optimize
+          distanceBetweenQueries = 50;
+        }
 
-          /*
-          * create polyfill line and get points at 20mi intervals
-          * push to coords array, include startint latling
-          */
+        /*
+        * create polyfill line and get points at 20mi intervals
+        * push to coords array, include startint latling
+        */
 
-          var coords = [];
+        var coords = [];
 
-          legs = response.routes[0].legs;
-          legs.forEach(function(item) {
-            steps = item.steps;
-            steps.forEach(function(item) {
-              path = item.path;
-              path.forEach(function(item) {
-                polyline.getPath().push(item);
-                bounds.extend(item);
-              });
+        legs = response.routes[0].legs;
+        legs.forEach(function(item) {
+          steps = item.steps;
+          steps.forEach(function(item) {
+            path = item.path;
+            path.forEach(function(item) {
+              polyline.getPath().push(item);
+              bounds.extend(item);
             });
           });
+        });
 
-          polyline.setMap(map);
-          map.fitBounds(bounds);
+        polyline.setMap(map);
+        map.fitBounds(bounds);
 
-          (polyline.GetPointsAtDistance(distanceBetweenQueries*1609.34)).forEach(function(x){
+        (polyline.GetPointsAtDistance(distanceBetweenQueries*1609.34)).forEach(function(x){
 
-            var obj = x.k+','+x.D
-            coords.push(obj);
-          });
+          var obj = x.k+','+x.D
+          coords.push(obj);
+        });
 
-          // push the starting position
+        // push the starting position
 
-          coords.push(response.routes[0].legs[0].start_location.k+','+response.routes[0].legs[0].start_location.D);
+        coords.push(response.routes[0].legs[0].start_location.k+','+response.routes[0].legs[0].start_location.D);
 
-          // objects to be sent to backend
-          var sendData = {
-            distance: distance,
-            optionFilter: $scope.optionFilter,
-            waypoints: coords
-          };
+        // objects to be sent to backend
+        var sendData = {
+          distance: distance,
+          optionFilter: $scope.optionFilter,
+          waypoints: coords
+        };
 
-          Maps.sendPost(sendData)
-          .then(function(res){
-            console.log("PROMISE OBJ: ", res.data.results);
-            // get back recommendations from Yelp and display as markers
-            Utility.placemarkers(res.data.results);
-            $scope.topTen = res.data.topTen;
-            console.log(res.data.results);
-          });
-        } else {
-          //Log the status code on error
-          console.log("Geocode was not successful: " + status);
-          //set the geoCodeNotSuccessful to true
-          $scope.geoCodeNotSuccessful = true;
-          $scope.appendWarningMsg($scope.geoCodeNotSuccessful); // append the warning message to main.html
-        }
-      });
-    }
+        Maps.sendPost(sendData)
+        .then(function(res){
+          console.log("PROMISE OBJ: ", res.data.results);
+          // get back recommendations from Yelp and display as markers
+          Utility.placemarkers(res.data.results);
+          $scope.topTen = res.data.topTen;
+          console.log(res.data.results);
+        });
+      } else {
+        //Log the status code on error
+        console.log("Geocode was not successful: " + status);
+        //set the geoCodeNotSuccessful to true
+        $scope.geoCodeNotSuccessful = true;
+        $scope.appendWarningMsg($scope.geoCodeNotSuccessful); // append the warning message to main.html
+      }
+    });
+  }
   };
 }])
 
 .factory('Maps', ['$http', function($http) {
-  // sends a POST to the server at route /csearch with all waypoints along route as data
-  var sendPost = function(routeObject){
-    return $http.post('/search', routeObject)
-      .then(function(response, error){
-        // POST request successfully sent and response code was returned
-        return response;
-      });
-    };
-
-  return {
-    sendPost: sendPost
+// sends a POST to the server at route /csearch with all waypoints along route as data
+var sendPost = function(routeObject){
+  return $http.post('/search', routeObject)
+    .then(function(response, error){
+      // POST request successfully sent and response code was returned
+      return response;
+    });
   };
+
+return {
+  sendPost: sendPost
+};
 
 }]);
