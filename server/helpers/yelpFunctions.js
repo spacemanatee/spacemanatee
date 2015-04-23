@@ -44,7 +44,6 @@ function isCommonPlace(businessEntry, commonFilter){
 module.exports.searchYelp = function (req, res, googleCoords, distance, callback) {
   //Counter variable which will keep track of how many Yelp calls have completed
   //A separate counter is needed due to the asynchronous nature of web requests
-  var trimmedCoords = coord.trimGoogleCoord(googleCoords, distance);
   var counter = 0;
   // Array that stores all of the Yelp results from all calls to Yelp
   var yelpResults = [];
@@ -53,15 +52,17 @@ module.exports.searchYelp = function (req, res, googleCoords, distance, callback
   yelpProperty.term = req.body.optionFilter;           // Type of business (food, restaurants, bars, hotels, etc.)
 
   if (distance <= 20) {
-    yelpProperty.radius_filter = 0.8 * 1609.34 ;
-  } else if (distance <= 40) {
-    yelpProperty.radius_filter = 2.5 * 1609.34;
+    yelpProperty.radius_filter = (distance/10) * 1609.34;
+    // 500 mile trip = 25 mile radius (checked every 25 mi)
+  } else if (distance <= 500) {
+    yelpProperty.radius_filter = (distance/20) * 1609.34;
   } else {
-    yelpProperty.radius_filter = 5 * 1609.34;
+    // yelp max radius is 25 mi
+    yelpProperty.radius_filter = 25 * 1609.34;
   }
 
   //Request yelp for each point along route that is returned by filterGoogle.js
-  for(var i = 0; i < trimmedCoords.length; i++){
+  for(var i = 0; i < googleCoords.length; i++){
     //yelpClient.search is asynchronous and so we must use a closure scope to maintain the value of i
     (function(i) {
       yelpClient.search({
@@ -69,7 +70,7 @@ module.exports.searchYelp = function (req, res, googleCoords, distance, callback
         limit: yelpProperty.limit,
         sort: yelpProperty.sort,
         radius_filter: yelpProperty.radius_filter,
-        ll: trimmedCoords[i]
+        ll: googleCoords[i]
       }, function(error, data) {
         if (error) {
           console.log(error);
@@ -78,7 +79,7 @@ module.exports.searchYelp = function (req, res, googleCoords, distance, callback
         yelpResults[i] = data;
         counter++;
         //After all yelp results are received call callback with those results
-        if(counter === trimmedCoords.length){
+        if(counter === googleCoords.length){
           callback(yelpResults);
         }
      });
