@@ -106,6 +106,7 @@ module.exports.createTopResultsJSON = function(yelpResults, distance, limit) {
     }
   }
   var allLength = allBusinesses.length;
+  console.log('ALL BUSINESSES: ', allLength);
 
   for (var i = 0 ; i < allLength; i++){
     // set those outside the search radius to be discarded
@@ -115,24 +116,28 @@ module.exports.createTopResultsJSON = function(yelpResults, distance, limit) {
   }
 
   invalidLength = invalidBusinesses.length;
+  console.log('INVALID BUSINESSES: ', invalidLength);
 
   for (var i = 0 ; i < allLength; i++){
-    // if remaining businesses > 10, set those with fewer than 4 stars to be discarded
-    if (allLength - invalidLength > 10 && allBusinesses[i].rating < 4 ){
+    // if remaining businesses > 50, set those with fewer than 4 stars to be discarded
+    if (allLength - invalidLength > 50 && allBusinesses[i].rating < 4 ){
       invalidBusinesses.push(allBusinesses[i]);
     }
   }
 
   invalidLength = invalidBusinesses.length;
+  console.log('INVALID BUSINESSES: ', invalidLength);
 
   for (var i = 0 ; i < allLength; i++){
-    // if remaining businesses > 10, set those with fewer than 5 reviews to be discarded
-    if (allLength - invalidLength > 10 && allBusinesses[i].review_count < 5){
+    console.log('REVIEW COUNT: ', allBusinesses[i].review_count);
+    // if remaining businesses > 50, set those with fewer than 2 reviews to be discarded
+    if (allLength - invalidLength > 50 && allBusinesses[i].review_count < 2){
       invalidBusinesses.push(allBusinesses[i]);
     }
   }
 
   invalidLength = invalidBusinesses.length;
+  console.log('INVALID BUSINESSES: ', invalidLength);
 
   // remove invalid businesses
   for (var i = 0 ; i < allLength ; i++){
@@ -146,6 +151,8 @@ module.exports.createTopResultsJSON = function(yelpResults, distance, limit) {
       remainingBusinesses.push(allBusinesses[i]);
     }
   }
+
+  console.log('REMAINING: ', remainingBusinesses.length);
 
   // sort remaining results based on rating
   remainingBusinesses.sort(function compareNumbers(a, b) {
