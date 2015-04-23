@@ -44,7 +44,6 @@ function isCommonPlace(businessEntry, commonFilter){
 module.exports.searchYelp = function (req, res, googleCoords, distance, callback) {
   //Counter variable which will keep track of how many Yelp calls have completed
   //A separate counter is needed due to the asynchronous nature of web requests
-  // var trimmedCoords = coord.trimGoogleCoord(googleCoords, distance);
   var counter = 0;
   // Array that stores all of the Yelp results from all calls to Yelp
   var yelpResults = [];
@@ -59,10 +58,10 @@ module.exports.searchYelp = function (req, res, googleCoords, distance, callback
     yelpProperty.radius_filter = (distance/20) * 1609.34;
   } else {
     // yelp max radius is 25 mi
-    25 * 1609.34;
+    yelpProperty.radius_filter = 25 * 1609.34;
   }
 
-  //Request yelp for each point along route that is returned by filterGoogle.js
+  //Request yelp for each point along route that is returned
   for(var i = 0; i < googleCoords.length; i++){
     console.log(googleCoords[i]);
     //yelpClient.search is asynchronous and so we must use a closure scope to maintain the value of i

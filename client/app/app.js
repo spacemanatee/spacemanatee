@@ -64,6 +64,18 @@ angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
           //Update the map on index.html
           directionsDisplay.setDirections(response);
 
+          if (!!polyline){
+            polyline.setmap(null);
+          }
+          var polyline = new google.maps.Polyline({
+            path: [],
+            strokeColor: '#FF0000',
+            strokeWeight: 0
+          });
+
+          var bounds = new google.maps.LatLngBounds();
+
+
 
           // - new google filtering - //
 
@@ -78,9 +90,12 @@ angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
             distanceBetweenQueries = distance/10;
           } else if (distance <= 500) {
             distanceBetweenQueries = distance/20;
-          } else {
+          } else if (distance <= 1500) {
             // default to yelp's max radius (25mi)
             distanceBetweenQueries = 25;
+          } else {
+            // optimize
+            distanceBetweenQueries = 50;
           }
 
           /*
@@ -88,7 +103,7 @@ angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
           * push to coords array, include startint latling
           */
 
-          var coords = []
+          var coords = [];
 
           legs = response.routes[0].legs;
           legs.forEach(function(item) {
@@ -107,41 +122,15 @@ angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
 
           (polyline.GetPointsAtDistance(distanceBetweenQueries*1609.34)).forEach(function(x){
 
-            var obj = {
-              location: {
-                coordinate : {
-                  latitude: x.k,
-                  longitude: x.D
-                }
-              }
-            };
+            var obj = x.k+','+x.D
             coords.push(obj);
           });
 
+
+
           // push the starting position
 
-          coords.push({
-              location: {
-                coordinate : {
-                  latitude: response.routes[0].legs[0].start_location.k,
-                  longitude: response.routes[0].legs[0].start_location.D
-                }
-              }
-            });
-
-          //   var obj = [x.k, x.D];
-          //   coords.push(obj);
-          // });
-
-          // // push the starting position
-
-          // coords.push([response.routes[0].legs[0].start_location.k,
-          //         response.routes[0].legs[0].start_location.D]);
-
-
-
-
-          console.log("DIRECTIONS RESPONSE: ", response);
+          coords.push(response.routes[0].legs[0].start_location.k+','+response.routes[0].legs[0].start_location.D);
 
           // objects to be sent to backend
           var sendData = {
