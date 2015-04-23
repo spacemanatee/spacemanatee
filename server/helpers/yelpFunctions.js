@@ -91,7 +91,8 @@ module.exports.searchYelp = function (req, res, googleCoords, distance, callback
 
 
 //Filter results returned from Yelp into an overall top 10
-module.exports.createTopResultsJSON = function(yelpResults, distance) {
+module.exports.createTopResultsJSON = function(yelpResults, distance, limit) {
+  limit = limit || 10;
   var allBusinesses = [];
   var topResults = [];
   var invalidBusinesses = [];
@@ -153,7 +154,7 @@ module.exports.createTopResultsJSON = function(yelpResults, distance) {
 
   // loop from highest to lowest
   for (var i = 0 ; i < remainingBusinesses.length ; i++){
-    if (topResults.length < 10){
+    if (topResults.length < limit){
       var pushIt = true;
       for (var j = 0 ; j < topResults.length ; j++){
         if (coord.calcDistance(remainingBusinesses[i], topResults[j]) < (distance / 20) ){
