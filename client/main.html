@@ -34,6 +34,7 @@
     <link href='https://fonts.googleapis.com/css?family=Lobster|Rancho' rel='stylesheet' type='text/css'>
 
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
+    <script type="text/javascript" src="./lib/v3_epoly.js"></script>
     <script type="text/javascript">
 
       var map;
@@ -65,6 +66,9 @@
       }
 
       google.maps.event.addDomListener(window, 'load', initialize);
+
+      // create polyline to retrace directions, allowing the calculation of lat/longitude at x-mile intervals
+
 
     </script>
 
