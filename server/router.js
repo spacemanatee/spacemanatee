@@ -7,11 +7,6 @@ var loggedIn = require('./authentication/utility').loggedIn;
 var isLoggedIn = require('./authentication/utility').isLoggedIn;
 var createFirebaseRef = require('./db/database');
 
-// router.get('/main/auth', passport.authenticate('google'));
-// router.get('/main/auth/success',
-//      passport.authenticate('google', {successRedirect:'/main',
-//                                         failureRedirect:'/main'}));
-
 router.get('/main/auth',
   passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile'] }),
   function(req, res){});
@@ -25,16 +20,14 @@ router.get('/main/auth/success',
 
 router.get('/login', loggedIn, function(req, res){
   res.redirect('/main');
-})
+});
 
 router.post('/db', loggedIn, function(req, res) {
   ref = createFirebaseRef();
-  //console.log("username", req.user);
+
   var childRef = ref.child('Users');
   var user = req.user.id;
   childRef.child(user).set({'someone': "test"});
-
-
   res.end('success');
 });
 
