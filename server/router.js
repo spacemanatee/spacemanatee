@@ -36,8 +36,9 @@ router.post('/search', function(req, res) {
 
   var googleCoords = req.body.waypoints;
   var distance = req.body.distance;
+  var limit = req.body.limit;
 
-  requestHandler.performSearch(req, res, googleCoords, distance);
+  requestHandler.performSearch(req, res, googleCoords, distance, limit);
 });
 
 router.get('/main', isLoggedIn, function (req, res) {
