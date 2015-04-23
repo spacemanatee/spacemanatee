@@ -7,12 +7,21 @@ var loggedIn = require('./authentication/utility').loggedIn;
 var isLoggedIn = require('./authentication/utility').isLoggedIn;
 var createFirebaseRef = require('./db/database');
 
-router.get('/main/auth', passport.authenticate('facebook'));
-router.get('/main/auth/success',
-     passport.authenticate('facebook', {successRedirect:'/main',
-                                        failureRedirect:'/main'}));
+// router.get('/main/auth', passport.authenticate('google'));
+// router.get('/main/auth/success',
+//      passport.authenticate('google', {successRedirect:'/main',
+//                                         failureRedirect:'/main'}));
+
+router.get('/main/auth',
+  passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile'] }),
+  function(req, res){});
 
 
+router.get('/main/auth/success', 
+  passport.authenticate('google', { failureRedirect: '/main' }),
+  function(req, res) {
+    res.redirect('/');
+  });
 
 router.get('/login', loggedIn, function(req, res){
   res.redirect('/main');
