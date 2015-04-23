@@ -3,13 +3,13 @@ angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
 .controller('mapCtrl', ['$scope', '$element', 'Maps', 'Utility', function($scope, $element, Maps, Utility) {
   // initialize the user input option selector
   $scope.optionSelections = [
-    {name: 'Everything', value: ""},
-    {name: 'Food', value: "food"},
-    {name: 'NightLife', value: "nightlife"},
-    {name: 'Shopping', value: "shopping"},
-    {name: 'Medical', value: "medical"},
-    {name: 'Gas', value: "gas"},
-    {name: 'Pets', value: "pets"}
+    {name: 'Everything', value: ''},
+    {name: 'Food',       value: 'food'},
+    {name: 'NightLife',  value: 'nightlife'},
+    {name: 'Shopping',   value: 'shopping'},
+    {name: 'Medical',    value: 'medical'},
+    {name: 'Gas',        value: 'gas'},
+    {name: 'Pets',       value: 'pets'}
   ];
 
   $scope.optionFilter;
