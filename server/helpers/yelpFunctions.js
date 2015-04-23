@@ -130,8 +130,8 @@ module.exports.createTopResultsJSON = function(yelpResults, distance, limit) {
 
   for (var i = 0 ; i < allLength; i++){
     console.log('REVIEW COUNT: ', allBusinesses[i].review_count);
-    // if remaining businesses > 50, set those with fewer than 2 reviews to be discarded
-    if (allLength - invalidLength > 50 && allBusinesses[i].review_count < 2){
+    // if remaining businesses > 50, set those with fewer than 5 reviews to be discarded
+    if (allLength - invalidLength > 50 && allBusinesses[i].review_count < 5){
       invalidBusinesses.push(allBusinesses[i]);
     }
   }
