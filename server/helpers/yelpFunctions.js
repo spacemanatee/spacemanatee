@@ -53,11 +53,13 @@ module.exports.searchYelp = function (req, res, googleCoords, distance, callback
   yelpProperty.term = req.body.optionFilter;           // Type of business (food, restaurants, bars, hotels, etc.)
 
   if (distance <= 20) {
-    yelpProperty.radius_filter = 0.8 * 1609.34 ;
-  } else if (distance <= 40) {
-    yelpProperty.radius_filter = 2.5 * 1609.34;
+    yelpProperty.radius_filter = (distance/10) * 1609.34;
+    // 500 mile trip = 25 mile radius (checked every 25 mi)
+  } else if (distance <= 500) {
+    yelpProperty.radius_filter = (distance/20) * 1609.34;
   } else {
-    yelpProperty.radius_filter = 5 * 1609.34;
+    // yelp max radius is 25 mi
+    yelpProperty.radius_filter = 25 * 1609.34;
   }
 
   //Request yelp for each point along route that is returned by filterGoogle.js
@@ -69,7 +71,7 @@ module.exports.searchYelp = function (req, res, googleCoords, distance, callback
         limit: yelpProperty.limit,
         sort: yelpProperty.sort,
         radius_filter: yelpProperty.radius_filter,
-        ll: trimmedCoords[i]
+        ll: googleCoords[i]
       }, function(error, data) {
         if (error) {
           console.log(error);
