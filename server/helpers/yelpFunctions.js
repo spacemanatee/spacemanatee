@@ -149,7 +149,7 @@ module.exports.createTopResultsJSON = function(yelpResults, distance, limit) {
 
   // sort remaining results based on rating
   remainingBusinesses.sort(function compareNumbers(a, b) {
-  return b - a;
+  return b.rating - a.rating;
   })
 
   // loop from highest to lowest
