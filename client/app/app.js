@@ -103,7 +103,7 @@ $scope.submit = function(city) {
         }
 
         /*
-        * create polyfill line and get points at 20mi intervals
+        * create polyline and get points at 20mi intervals
         * push to coords array, include startint latling
         */
 
@@ -124,11 +124,16 @@ $scope.submit = function(city) {
         polyline.setMap(map);
         map.fitBounds(bounds);
 
-        (polyline.GetPointsAtDistance(distanceBetweenQueries*1609.34)).forEach(function(x){
+        // remove first and last couple of search queries
+        var intervalWaypoints = polyline.GetPointsAtDistance(distanceBetweenQueries*1609.34);
+        console.log(intervalWaypoints)
+        for (var i = 2; i < intervalWaypoints.length - 2; i++) {
+          var x = intervalWaypoints[i];
 
           var obj = x.k+','+x.D
           coords.push(obj);
-        });
+        };
+
 
         // objects to be sent to backend
         var sendData = {
