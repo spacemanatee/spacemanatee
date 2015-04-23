@@ -130,10 +130,6 @@ $scope.submit = function(city) {
           coords.push(obj);
         });
 
-        // push the starting position
-
-        coords.push(response.routes[0].legs[0].start_location.k+','+response.routes[0].legs[0].start_location.D);
-
         // objects to be sent to backend
         var sendData = {
           distance: distance,
