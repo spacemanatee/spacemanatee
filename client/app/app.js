@@ -61,12 +61,14 @@ angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
         // successfully get the direction based on locations
         if (status === google.maps.DirectionsStatus.OK) {
           $scope.geoCodeNotSuccessful=false;
-          //Update the map on index.html
+          // update the map on index.html
           directionsDisplay.setDirections(response);
 
+          // if polyline from previous search, remove it
           if (!!polyline){
             polyline.setmap(null);
           }
+
           var polyline = new google.maps.Polyline({
             path: [],
             strokeColor: '#FF0000',
@@ -74,8 +76,6 @@ angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
           });
 
           var bounds = new google.maps.LatLngBounds();
-
-
 
           // - new google filtering - //
 
@@ -125,8 +125,6 @@ angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
             var obj = x.k+','+x.D
             coords.push(obj);
           });
-
-
 
           // push the starting position
 
