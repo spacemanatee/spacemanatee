@@ -4,6 +4,7 @@ var router = express.Router();
 var path = require('path');
 var passport = require('./authentication/authentication');
 var loggedIn = require('./authentication/utility').loggedIn;
+var isLoggedIn = require('./authentication/utility').isLoggedIn;
 var createFirebaseRef = require('./db/database');
 
 router.get('/main/auth', passport.authenticate('facebook'));
@@ -14,7 +15,7 @@ router.get('/main/auth/success',
 
 
 router.get('/login', loggedIn, function(req, res){
-  res.redirect('/home');
+  res.redirect('/main');
 })
 
 router.post('/db', loggedIn, function(req, res) {
@@ -37,7 +38,7 @@ router.post('/search', function(req, res) {
   requestHandler.performSearch(req, res, googleCoords, distance);
 });
 
-router.get('/main', function (req, res) {
+router.get('/main', isLoggedIn, function (req, res) {
   res.sendFile(path.join(__dirname,'../client', 'main.html'));
 });
 
