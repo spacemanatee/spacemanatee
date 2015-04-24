@@ -151,6 +151,7 @@ module.exports.createTopResultsJSON = function(yelpResults, distance, limit) {
   })
 
   var topResults = findTopTen(remainingBusinesses, distance, limit, 20);
+  console.log('**FINAL TOP RESULTS LENGTH: ', topResults.length);
 
   // The previous group had two groups, results (which had pin drops) and topTen (which showed in list). We are using our new top 10 for both groups.
   var result = {
@@ -162,30 +163,31 @@ module.exports.createTopResultsJSON = function(yelpResults, distance, limit) {
 
 };
 
-var findTopTen = function(remainingBusinesses, distance, limit, distDivisor){
+var findTopTen = function(fullList, dist, lim, distDivisor){
   console.log('FIND TOP 10, DIVISOR: ', distDivisor)
-  var topResults = [];
+  var results = [];
   // loop from highest to lowest
-  for (var i = 0 ; i < remainingBusinesses.length ; i++){
-    if (topResults.length < limit){
-      var pushIt = true;
-      // loop through top 10
-      for (var j = 0 ; j < topResults.length ; j++){
-        // if business is not too close to an existing top 10 business, add to top 10
-        if (coord.calcDistance(remainingBusinesses[i], topResults[j]) < (distance / distDivisor) ){
-          pushIt = false;
-        }
-      }
-      if (pushIt === true){
-        topResults.push(remainingBusinesses[i]);
+  var i = 0 
+  while (i < fullList.length && results.length < lim){
+    var pushIt = true;
+    // loop through top 10
+    for (var j = 0 ; j < results.length ; j++){
+      // if business is not too close to an existing top 10 business, add to top 10
+      if (coord.calcDistance(fullList[i], results[j]) < (dist / distDivisor) ){
+        pushIt = false;
       }
     }
+    if (pushIt === true){
+      results.push(fullList[i]);
+    }
+    i++;
   }
-  console.log('TOP RESULTS LENGTH: ', topResults.length);
-  if (topResults.length < 10){
-    findTopTen(remainingBusinesses, distance, limit, distDivisor+5)
+  console.log('TOP RESULTS LENGTH: ', results.length);
+  if (results.length < lim){
+    console.log('RECURSE');
+    results = findTopTen(fullList, dist, lim, distDivisor+5);
   }
-  return topResults;
+  return results;
 };
 
 
