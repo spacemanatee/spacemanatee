@@ -117,11 +117,6 @@
         <h1 class="title">Plan your trip</h1>
         <div id='journey'>
           <form class="navbar-form navbar-center" name="submitForm" autofill-submit='submit()'>
-            <div class="form-group">
-              <button class="btn btn-info" ng-click="useCurrentLocation()" type="button"><i class="fa fa-location-arrow"></i></button>
-              <input type="text" autofill class="form-control submissionfield" id="start" placeholder="Starting location..." ng-model="location.start">
-              <input type="text" autofill class="form-control submissionfield" id="end" placeholder="Destination..." ng-model="location.end">
-            </div><br>
             <div class="btn-group option-btns" data-toggle="buttons">
               <label class="btn btn-info" ng-repeat="option in optionSelections" ng-click="chooseFilter(option)">
                 <input type="radio"> {{option.name}}
@@ -129,7 +124,7 @@
             </div>
             <br></br>
             <div class="form-group">
-              <button class="btn btn-info" ng-click="useCurrentLocation()" id="location-button"><i class="fa fa-location-arrow"></i></button>
+              <button class="btn btn-info" ng-click="useCurrentLocation()" id="location-button" type="button"><i class="fa fa-location-arrow"></i></button>
               <input type="text" autofill class="form-control submissionfield" id="start" placeholder="Starting location..." ng-model="location.start">
               <input type="text" autofill class="form-control submissionfield" id="end" placeholder="Destination..." ng-model="location.end">
             </div>
