@@ -114,8 +114,8 @@ module.exports.createTopResultsJSON = function(yelpResults, distance, limit) {
   invalidLength = invalidBusinesses.length;
 
   for (var i = 0 ; i < allLength; i++){
-    // if remaining businesses > 50, set those with fewer than 4 stars to be discarded
-    if (allLength - invalidLength > 50 && allBusinesses[i].rating < 4 ){
+    // set businesses with fewer than 4 stars to be discarded
+    if (allBusinesses[i].rating < 4 ){
       invalidBusinesses.push(allBusinesses[i]);
     }
   }
@@ -123,8 +123,8 @@ module.exports.createTopResultsJSON = function(yelpResults, distance, limit) {
   invalidLength = invalidBusinesses.length;
 
   for (var i = 0 ; i < allLength; i++){
-    // if remaining businesses > 50, set those with fewer than 5 reviews to be discarded
-    if (allLength - invalidLength > 50 && allBusinesses[i].review_count < 5){
+    // set businesses with fewer than 5 reviews to be discarded
+    if (allBusinesses[i].review_count < 5){
       invalidBusinesses.push(allBusinesses[i]);
     }
   }
@@ -150,8 +150,7 @@ module.exports.createTopResultsJSON = function(yelpResults, distance, limit) {
   return b.rating - a.rating;
   })
 
-  var topResults = findTopTen(remainingBusinesses, distance, limit, 20);
-  console.log('**FINAL TOP RESULTS LENGTH: ', topResults.length);
+  var topResults = findTopTen(remainingBusinesses, distance, limit, 15);
 
   // The previous group had two groups, results (which had pin drops) and topTen (which showed in list). We are using our new top 10 for both groups.
   var result = {
@@ -164,7 +163,6 @@ module.exports.createTopResultsJSON = function(yelpResults, distance, limit) {
 };
 
 var findTopTen = function(fullList, dist, lim, distDivisor){
-  console.log('FIND TOP 10, DIVISOR: ', distDivisor)
   var results = [];
   // loop from highest to lowest
   var i = 0 
@@ -182,9 +180,7 @@ var findTopTen = function(fullList, dist, lim, distDivisor){
     }
     i++;
   }
-  console.log('TOP RESULTS LENGTH: ', results.length);
   if (results.length < lim){
-    console.log('RECURSE');
     results = findTopTen(fullList, dist, lim, distDivisor+5);
   }
   return results;
