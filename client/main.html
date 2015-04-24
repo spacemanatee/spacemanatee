@@ -127,6 +127,13 @@
                 <input type="radio"> {{option.name}}
               </label>
             </div><br>
+
+            <div class="btn-group option-btns" data-toggle="buttons">
+              <label class="btn btn-info" ng-repeat="limit in limitSelections" ng-click="chooseLimit(limit)">
+                <input type="radio"> {{limit.name}}
+              </label>
+            </div><br>
+
             <button type="submit" class="btn btn-success btn-lg">Let's Go!</button>
           </form>
         </div>
@@ -143,7 +150,7 @@
   <div class="container-fluid top-ten-container" ng-if="!!topTen" ng-model="topTen">
     <div class="row">
       <div class="col-md-10 col-md-offset-1">
-        <h1 class="tagline">Here's our Top 10 favorite spots along the journey!</h1>
+        <h1 class="tagline">Here's our list of top spots along the journey!</h1>
       </div>
     </div>
     <div class="row" ng-repeat="top in topTen" ng-class="{'oddTop10': $odd , 'evenTop10': $even}">

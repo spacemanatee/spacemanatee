@@ -11,7 +11,13 @@ angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
     {name: 'Hotels',      value: 'hotels'}
   ];
 
+  $scope.limitSelections = [
+  {name: 'Top 10', value: 10},
+  {name: 'Top 20', value: 20}
+  ];
+
   $scope.optionFilter;
+  $scope.limitFilter;
 
   // initialize the geoCodeNotSuccessful to be used for determining valid continental destination or not
   $scope.geoCodeNotSuccessful = false;
@@ -31,6 +37,10 @@ angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
   $scope.chooseFilter = function(option) {
     $scope.optionFilter = option.value;
   };
+
+  $scope.chooseLimit = function(limit) {
+    $scope.limitFilter = limit.value;
+  }
 
   $scope.appendWarningMsg = function(isInvalid) {
     // invalid message template
@@ -150,7 +160,8 @@ $scope.submit = function(city) {
         var sendData = {
           distance: distance,
           optionFilter: $scope.optionFilter,
-          waypoints: coords
+          waypoints: coords,
+          limit: $scope.limitFilter
         };
 
         Maps.sendPost(sendData)
