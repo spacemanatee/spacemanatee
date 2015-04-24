@@ -127,6 +127,13 @@
                 <input type="radio"> {{option.name}}
               </label>
             </div><br>
+
+            <div class="btn-group option-btns" data-toggle="buttons">
+              <label class="btn btn-info" ng-repeat="limit in limitSelections" ng-click="chooseLimit(limit)">
+                <input type="radio"> {{limit.name}}
+              </label>
+            </div><br>
+
             <button type="submit" class="btn btn-success btn-lg">Let's Go!</button>
           </form>
         </div>
