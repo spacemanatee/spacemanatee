@@ -1,31 +1,57 @@
-angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
-
-.controller('mapCtrl', ['$scope', '$element', 'Maps', 'Utility', function($scope, $element, Maps, Utility) {
-  //initialize the user input option selector
+angular.module('app', ['autofill-directive', 'app.service'])
+.controller('mapCtrl', ['$scope', '$element', 'Maps', 'Favorites', 'Utility', function($scope, $element, Maps, Favorites, Utility) {
+  // initialize the user input option selector
   $scope.optionSelections = [
-    {name: 'Everything', value:""},
-    {name: 'Food', value:"food"},
-    {name: 'NightLife', value:"nightlife"},
-    {name: 'Shopping', value:"shopping"},
-    {name: 'Medical', value:"medical"},
-    {name: 'Gas', value:"gas"},
-    {name: 'Pets', value:"pets"}
+    {name: 'Everything',  value: ''},
+    {name: 'Food',        value: 'food'},
+    {name: 'Arts',        value: 'arts'},
+    {name: 'Nightlife',   value: 'nightlife'},
+    {name: 'Parks',       value: 'parks'},
+    {name: 'Shopping',    value: 'shopping'},
+    {name: 'Hotels',      value: 'hotels'}
   ];
-  //set default option filter to "food"
-  $scope.optionFilter = $scope.optionSelections[1].value;
-  //initialize the geoCodeNotSuccessful to be used for determining valid continental destination or not
+
+  $scope.limitSelections = [
+  {name: 'Top 10', value: 10},
+  {name: 'Top 20', value: 20}
+  ];
+
+  $scope.optionFilter;
+  $scope.limitFilter;
+
+  // initialize the geoCodeNotSuccessful to be used for determining valid continental destination or not
   $scope.geoCodeNotSuccessful = false;
+
+  // geolocation search
+
+  $scope.useCurrentLocation = function(){
+    $('#start').val("Searching for current location...");
+    navigator.geolocation.getCurrentPosition(function(position){
+    $('#start').val([position.coords.latitude, position.coords.longitude]);
+    }, function(){
+    $('#start').val("Error retrieving location.");
+    });
+  };
+
+  // save label selection to scope
+  $scope.chooseFilter = function(option) {
+    $scope.optionFilter = option.value;
+  };
+
+  $scope.chooseLimit = function(limit) {
+    $scope.limitFilter = limit.value;
+  }
 
   $scope.appendWarningMsg = function(isInvalid) {
     // invalid message template
     var pInvalid = angular.element("<p id='warningMsg'/>");
-    pInvalid.text("Please choose a continental location and resubmit");
+    pInvalid.text("Please choose two continental locations");
     // valid message template
     var pValid = angular.element("<p id='warningMsg'/>");
     pValid.text("");
-    //check to see if the location entered is invalid
-    //if location is invalid, then append invalid message 
-    // else, append a blank message 
+    // check to see if the location entered is invalid
+    // if location is invalid, then append invalid message
+    // else, append a blank message
     if (isInvalid) {
       $element.find("main-area").append(pInvalid);
     } else {
@@ -36,7 +62,6 @@ angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
   $scope.submit = function(city) {
     $scope.geoCodeNotSuccessful = false;  // every time when submit button is pressed, reset the geoCodeNotSuccessful to false
     $element.find("main-area").empty();   // clear out the warning messages from previous location input
-    console.log("SCOPE ENTIRE: ", $scope.location);
     var startGeo, endGeo;
 
     calcRoute();
@@ -60,31 +85,84 @@ angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
       directionsService.route(request, function(response, status) {
         // successfully get the direction based on locations
         if (status === google.maps.DirectionsStatus.OK) {
-          $scope.geoCodeNotSuccessful=false;  
-          //Update the map on index.html
+          $scope.geoCodeNotSuccessful=false;
+          // update the map on index.html
           directionsDisplay.setDirections(response);
 
-          console.log("DIRECTIONS RESPONSE: ", response);
-          console.log("LENGTH: ", response.routes[0].overview_path.length);
-          console.log("OVERVIEW PATH: ", response.routes[0].overview_path);
+          // if polyline from previous search, remove it
+          if (!!polyline){
+            polyline.setmap(null);
+          }
+
+          var polyline = new google.maps.Polyline({
+            path: [],
+            strokeColor: '#FF0000',
+            strokeWeight: 0
+          });
+
+          var bounds = new google.maps.LatLngBounds();
+
+          // - new google filtering - //
+
+          // convert metric distance to miles
+
+          distance = response.routes[0].legs[0].distance.value/1609.34;
+
+          // determine the distance between queries
+          var distanceBetweenQueries;
+
+          if (distance <= 20) {
+            distanceBetweenQueries = distance/10;
+          } else if (distance <= 500) {
+            distanceBetweenQueries = distance/20;
+          } else if (distance <= 1500) {
+            // default to yelp's max radius (25mi)
+            distanceBetweenQueries = 25;
+          } else {
+            // optimize
+            distanceBetweenQueries = 50;
+          }
+
+          /*
+            create polyline and get points at 20mi intervals
+            push to coords array, include startint latling
+          */
+
+          var coords = [];
+
+          legs = response.routes[0].legs;
+          legs.forEach(function(item) {
+            steps = item.steps;
+            steps.forEach(function(item) {
+              path = item.path;
+              path.forEach(function(item) {
+                polyline.getPath().push(item);
+                bounds.extend(item);
+              });
+            });
+          });
+
+          polyline.setMap(map);
+          map.fitBounds(bounds);
+
+          // remove first and last couple of search queries
+          var intervalWaypoints = polyline.GetPointsAtDistance(distanceBetweenQueries*1609.34);
+          console.log(intervalWaypoints);
+          for (var i = 2; i < intervalWaypoints.length - 2; i++) {
+            var x = intervalWaypoints[i];
+
+            var obj = x.k+','+x.D;
+            coords.push(obj);
+          }
 
           // objects to be sent to backend
           var sendData = {
-            distance: response.routes[0].legs[0].distance.text,
+            distance: distance,
             optionFilter: $scope.optionFilter,
-            waypoints: {}
+            waypoints: coords,
+            limit: $scope.limitFilter
           };
 
-          //gather all points along route returned by Google in overview_path property
-          //and insert them into waypoints object to send to server
-          for (var j = 0; j < response.routes[0].overview_path.length; j++) {
-            sendData.waypoints[j] = response.routes[0].overview_path[j].k + "," + response.routes[0].overview_path[j].D;
-          }
-
-          console.log("sendData: ", sendData);
-          $scope.appendWarningMsg($scope.geoCodeNotSuccessful); // append the blank (no warning) message to main.html
-
-          // Send all waypoints along route to server
           Maps.sendPost(sendData)
           .then(function(res){
             console.log("PROMISE OBJ: ", res.data.results);
@@ -94,30 +172,90 @@ angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
             console.log(res.data.results);
           });
         } else {
-          //Log the status code on error
-          console.log("Geocode was not successful: " + status);
-          //set the geoCodeNotSuccessful to true
-          $scope.geoCodeNotSuccessful = true;
-          $scope.appendWarningMsg($scope.geoCodeNotSuccessful); // append the warning message to main.html
+        //Log the status code on error
+        console.log("Geocode was not successful: " + status);
+        //set the geoCodeNotSuccessful to true
+        $scope.geoCodeNotSuccessful = true;
+        $scope.appendWarningMsg($scope.geoCodeNotSuccessful); // append the warning message to main.html
         }
       });
     }
   };
+
+  $scope.favorite = function(businessObject) {
+    Favorites.sendPost(businessObject);
+  };
+
 }])
+
+.factory('Favorites', ['$http', function($http) {
+  var sendPost = function(businessObject) {
+    console.log('favorite sent');
+    // return $http.post('/favorites', businessObject)
+    //   .then(function(response, error) {
+    //     return response;
+    //   });
+  };
+
+  var getFavorites = function() {
+    return $http.get('/favorites')
+      .then(function(response, error) {
+        return response;
+      });
+  };
+
+  return {
+    sendPost: sendPost,
+    getFavorites: getFavorites
+  };
+}])
+
+.controller('favoritesCtrl', [ '$scope', 'Favorites', '$log', function($scope, Favorites, $log) {
+  // Favorites.getFavorites().then(function(res){
+  //         $log.log(res.data);
+  //         $scope.favorites = res.data;
+  //       });
+  $scope.favorites = Favorites.getFavorites();
+  $log.log($scope.favorites);
+
+}])
+
 .factory('Maps', ['$http', function($http) {
-  //This function sends a POST to the server at route /csearch with all waypoints along route as data
+// sends a POST to the server at route /csearch with all waypoints along route as data
   var sendPost = function(routeObject){
     return $http.post('/search', routeObject)
       .then(function(response, error){
-        //POST request successfully sent and response code was returned
-        console.log('response: ', response);
-        console.log('error: ', error);
+        // POST request successfully sent and response code was returned
         return response;
       });
     };
 
   return {
     sendPost: sendPost
+  };
+
+}])
+
+.factory('Favorites', ['$http', function($http) {
+// sends a POST to the server at route /csearch with all waypoints along route as data
+  var postFavorite = function(bussinessObject){
+    return $http.post('/favorites', bussinessObject)
+      .then(function(response, error){
+        return response;
+      });
+  };
+
+  var getFavorites = function(){
+    // return $http.get('/favorites')
+    //   .then(function(response, error){
+    //     return response;
+    //   });
+    return [{"is_claimed":false,"distance":170.9099000075661,"mobile_url":"http://m.yelp.com/biz/smoke-signals-san-francisco","rating_img_url":"http://s3-media1.fl.yelpassets.com/assets/2/www/img/f1def11e4e79/ico/stars/v1/stars_5.png","review_count":42,"name":"Smoke Signals","snippet_image_url":"http://s3-media4.fl.yelpassets.com/photo/DREJpjmBMUjMNv8dwvSkng/ms.jpg","rating":5,"url":"http://www.yelp.com/biz/smoke-signals-san-francisco","location":{"cross_streets":"Vallejo St & Bonita St","city":"San Francisco","display_address":["2223 Polk St","Russian Hill","San Francisco, CA 94109"],"geo_accuracy":8,"neighborhoods":["Russian Hill"],"postal_code":"94109","country_code":"US","address":["2223 Polk St"],"coordinate":{"latitude":37.7972603,"longitude":-122.4222107},"state_code":"CA"},"phone":"4152926025","snippet_text":"This place has an absolutely fabulous selection of magazines - of all types. The owner is so helpful and respectful too - along with other staff I've come...","image_url":"http://s3-media2.fl.yelpassets.com/bphoto/iVwiEss10z39mvmTbKoqlg/ms.jpg","categories":[["Newspapers & Magazines","mags"],["Food","food"]],"display_phone":"+1-415-292-6025","rating_img_url_large":"http://s3-media3.fl.yelpassets.com/assets/2/www/img/22affc4e6c38/ico/stars/v1/stars_large_5.png","id":"smoke-signals-san-francisco","is_closed":false,"rating_img_url_small":"http://s3-media1.fl.yelpassets.com/assets/2/www/img/c7623205d5cd/ico/stars/v1/stars_small_5.png"}];
+  };
+
+  return {
+    postFavorite: postFavorite,
+    getFavorites: getFavorites
   };
 
 }]);

@@ -1,10 +1,3 @@
-# spacemanatee
+# Roadtrip Advisor - Mountainwolf
 
-Manatees are now in space.
-## Team
-
-- Product Owner: Travis Neufeld
-- Scrum Master: David Tan
-- Development Team: Seven Li, Paul Brady
-
-
+**Find points of interest along your road trip.**

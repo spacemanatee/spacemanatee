@@ -1,7 +1,7 @@
 /* CSS Reset */
 html,body,div,span,applet,object,iframe,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,dl,dt,dd,ol,ul,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,label,legend,p,blockquote,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-weight:inherit;font-style:inherit;font-size:100%;font-family:inherit;vertical-align:baseline;}body{line-height:1;color:black;background:white;}:focus{outline:0;}table{border-collapse:collapse;border-spacing:0;}caption,th,td{text-align:left;font-weight:normal;}fieldset,img{border:0;}address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal;}ol,ul{list-style:none;}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}blockquote:before,blockquote:after,q:before,q:after{content:"";}blockquote,q{quotes:"" "";}abbr,acronym{border:0;}
 
-#title {
+.title {
   text-align: center;
   float: center;
   padding: 15px 0 15px 0;
@@ -23,7 +23,7 @@ html, body, #map-canvas {
 }
 
 #map-canvas {
-  border: solid 3px #9ba894;
+  border-radius: 4px;
   margin-left: auto;
   margin-right: auto;
   width: 90%;
@@ -32,21 +32,37 @@ html, body, #map-canvas {
 
 body {
   background-image:url('../images/ricepaper_v3.png');
+  font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 700;
+}
+
+h1, .logo-1 {
+  font-family: 'Rancho', Helvetica, Arial, sans-serif;
+}
+
+.logo-2 {
+  font-family: 'Lobster', Helvetica, Arial, sans-serif;
 }
 
 h1 {
-  font-family: 'Rancho', helvetica, arial;
   font-size: 3em;
 }
-h1 span {
-  font-family: 'Lobster', helvetica, arial;
-  font-size: 0.9em;
-  position:relative;
-  top:1px;
+
+.topnav {
+  font-size: 16px;
+}
+
+.option-btns {
+  margin: 10px 0;
+}
+
+.search-content {
+  padding-top: 40px;
+  padding-bottom: 20px;
 }
 
 .descriptionDiv {
-  background-image:url('../images/food.png');
+  background-image:url('../images/polonez_car_yellow.png');
   border: 1px solid red;
   border-radius: 5px;
   width: 250px;
@@ -59,22 +75,67 @@ h1 span {
   font-size: 2.0em;
 }
 
+.tagline {
+  text-align: center;
+  vertical-align: center;
+  padding-bottom: 20px;
+}
+
 .oddTop10 {
-  background-image:url('../images/travel.jpg');
-  background-size: 50%, 50%;
+  background-color: #F8F8F8;
 }
 
 .evenTop10 {
-  background-image:url('../images/food.png');
+  background-image:url('../images/polonez_car_yellow.png');
 }
 
 table {
   table-layout: fixed;
 }
 
-#topTenList {
-  border: 1px solid #999999;;
+.top-ten-container {
+  vertical-align: middle;
+  text-align: left;
+  width: 70%;
 }
+
+.top-content {
+  padding: 15px 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.top-name {
+  font-family: 'Rancho', Helvetica, Arial, sans-serif;
+  font-size: 1.5em;
+  padding-bottom: 5px;
+}
+
+.top-location {
+  padding-bottom: 5px;
+}
+
+.top-snippet {
+  padding: 10px 30px 0 0;
+  font-family: 'Rancho', Helvetica, Arial, sans-serif;
+  font-weight: 300;
+  font-size: 1.3em;
+  line-height: 1.3em;
+}
+
+a.favorite {
+  float: right;
+  text-decoration: none;
+  font-size: 1.4em;
+  color: #5CB85C;
+}
+
+a.favorite:hover {
+  text-decoration: none;
+  color: #5C965C;
+  cursor: pointer;
+}
+
 .snippet {
   display: block;
   width: 100%;
@@ -90,6 +151,26 @@ table {
   vertical-align: middle;
   text-align: center;
   font-size: 2.0em;
-  font-family: 'Rancho', helvetica, arial;
+  font-family: 'Rancho', Helvetica, Arial, sans-serif;
   color: red;
+}
+
+#letsgo {
+  margin-left: 20px;
+}
+
+#location-button {
+  height: 30px;
+  width: 30px;
+  text-align: center;
+  padding: 0;
+}
+
+.submissionfield {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+#favorites-container {
+  margin-top: 5em;
 }

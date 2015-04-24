@@ -1,21 +1,47 @@
 var requestHandler = require('./request-handler');
-var filter = require('./filters/filterGoogle');
 var express = require('express');
 var router = express.Router();
 var path = require('path');
+var passport = require('./authentication/authentication');
+var loggedIn = require('./authentication/utility').loggedIn;
+var isLoggedIn = require('./authentication/utility').isLoggedIn;
+var createFirebaseRef = require('./db/database');
+
+router.get('/main/auth',
+  passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile'] }),
+  function(req, res){});
+
+
+router.get('/main/auth/success', 
+  passport.authenticate('google', { failureRedirect: '/main' }),
+  function(req, res) {
+    res.redirect('/main');
+  });
+
+router.get('/login', loggedIn, function(req, res){
+  res.redirect('/main');
+});
+
+router.post('/db', loggedIn, function(req, res) {
+  ref = createFirebaseRef();
+
+  var childRef = ref.child('Users');
+  var user = req.user.id;
+  childRef.child(user).set({'someone': "test"});
+  res.end('success');
+});
 
 router.post('/search', function(req, res) {
   console.log('(POST "/search") Now searching the Yelp API...');
-  //call the google filter to return only the points along the route that are n distance apart
-  var googleFilterObj = filter(req.body);
 
-  var googleCoords = googleFilterObj.filteredCoords;
-  var distance = googleFilterObj.distance;
+  var googleCoords = req.body.waypoints;
+  var distance = req.body.distance;
+  var limit = req.body.limit;
 
-  requestHandler.performSearch(req, res, googleCoords, distance);
+  requestHandler.performSearch(req, res, googleCoords, distance, limit);
 });
 
-router.get('/main', function (req, res) {
+router.get('/main', isLoggedIn, function (req, res) {
   res.sendFile(path.join(__dirname,'../client', 'main.html'));
 });
 
