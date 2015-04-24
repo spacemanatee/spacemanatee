@@ -1,3 +1,7 @@
+$(document).ready(function() {
+  $(#geolocate).preventDefault();
+});
+
 angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
 .controller('mapCtrl', ['$scope', '$element', 'Maps', 'Utility', function($scope, $element, Maps, Utility) {
   // initialize the user input option selector
