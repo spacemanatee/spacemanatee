@@ -3,7 +3,7 @@ var passport = require('passport'),
     GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 if (!process.env.GOOGLE_ID) {
-  var key = require('../api/api_key').google,
+  var key = require('../api/api_key').google;
   var callbackCurrentURL = "http://localhost:3456/main/auth/success";
 } else {
   var callbackCurrentURL = process.env.CALLBACK_URL;
@@ -20,7 +20,7 @@ passport.deserializeUser(function(user, done) {
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_ID || key.clientID,
     clientSecret: process.env.GOOGLE_SECRET || key.clientSecret,
-    callbackURL: callbackCurrentURL;
+    callbackURL: callbackCurrentURL
   },
   function(accessToken, refreshToken, profile, done) {
     process.nextTick(function () {
