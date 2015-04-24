@@ -141,3 +141,19 @@ table {
   font-family: 'Rancho', Helvetica, Arial, sans-serif;
   color: red;
 }
+
+#letsgo {
+  margin-left: 20px;
+}
+
+#location-button {
+  height: 30px;
+  width: 30px;
+  text-align: center;
+  padding: 0;
+}
+
+.submissionfield {
+  margin-left: 5px;
+  margin-right: 5px;
+}

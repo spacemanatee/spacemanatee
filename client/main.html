@@ -126,15 +126,27 @@
               <label class="btn btn-info" ng-repeat="option in optionSelections" ng-click="chooseFilter(option)">
                 <input type="radio"> {{option.name}}
               </label>
-            </div><br>
+            </div>
+            <br></br>
+            <div class="form-group">
+              <button class="btn btn-info" ng-click="useCurrentLocation()" id="location-button"><i class="fa fa-location-arrow"></i></button>
+              <input type="text" autofill class="form-control submissionfield" id="start" placeholder="Starting location..." ng-model="location.start">
+              <input type="text" autofill class="form-control submissionfield" id="end" placeholder="Destination..." ng-model="location.end">
+            </div>
+            <br></br>
+            <div>
+              <span>
+                <div class="btn-group option-btns" data-toggle="buttons">
+                  <label class="btn btn-info" ng-repeat="limit in limitSelections" ng-click="chooseLimit(limit)">
+                    <input type="radio"> {{limit.name}}
+                  </label>
+                </div>
+              </span>
 
-            <div class="btn-group option-btns" data-toggle="buttons">
-              <label class="btn btn-info" ng-repeat="limit in limitSelections" ng-click="chooseLimit(limit)">
-                <input type="radio"> {{limit.name}}
-              </label>
-            </div><br>
-
-            <button type="submit" class="btn btn-success btn-lg">Let's Go!</button>
+              <span>
+                <button type="submit" class="btn btn-success btn-lg" id="letsgo">Let's Go!</button>
+              </span>
+            </div>
           </form>
         </div>
       </div><!-- col-lg-12 -->
