@@ -118,7 +118,7 @@
         <div id='journey'>
           <form class="navbar-form navbar-center" name="submitForm" autofill-submit='submit()'>
             <div class="btn-group option-btns" data-toggle="buttons">
-              <label class="btn btn-info" ng-repeat="option in optionSelections" ng-click="chooseFilter(option)">
+              <label class="btn btn-info" ng-repeat="option in optionSelections" ng-click="chooseFilter(option)" ng-class="option.name === 'Everything' ? 'active': ''">
                 <input type="radio"> {{option.name}}
               </label>
             </div>
@@ -132,7 +132,7 @@
             <div>
               <span>
                 <div class="btn-group option-btns" data-toggle="buttons">
-                  <label class="btn btn-info" ng-repeat="limit in limitSelections" ng-click="chooseLimit(limit)">
+                  <label class="btn btn-info" ng-repeat="limit in limitSelections" ng-click="chooseLimit(limit)" ng-class="limit.name === 'Top 10' ? 'active': ''">
                     <input type="radio"> {{limit.name}}
                   </label>
                 </div>
