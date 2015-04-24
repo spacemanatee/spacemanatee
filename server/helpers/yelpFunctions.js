@@ -1,6 +1,9 @@
 var yelp = require('./yelp');
-var key = require('../api/api_key');
 var coord = require('./coordinateHelpers');
+
+if (!process.env.KEY) {
+  var key = require('../api/api_key');
+}
 
 // create yelp client using Oauth
 var yelpClient = yelp.createClient({
@@ -165,7 +168,7 @@ module.exports.createTopResultsJSON = function(yelpResults, distance, limit) {
 var findTopTen = function(fullList, dist, lim, distDivisor){
   var results = [];
   // loop from highest to lowest
-  var i = 0 
+  var i = 0
   while (i < fullList.length && results.length < lim){
     var pushIt = true;
     // loop through top 10
