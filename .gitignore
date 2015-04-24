@@ -27,7 +27,10 @@ dist/
 # Deployed apps should consider commenting these lines out:
 # see https://npmjs.org/doc/faq.html#Should-I-check-my-node_modules-folder-into-git
 node_modules/
-client/lib
+client/lib/angular
+client/lib/angular-mocks
+client/lib/angular-route
+client/lib/autofill-directive
 server/api/
 server/.DS_Store
 .DS_Store
