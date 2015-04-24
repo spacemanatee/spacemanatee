@@ -1,9 +1,12 @@
 var Firebase = require("firebase");
 var FirebaseTokenGenerator = require("firebase-token-generator");
-var secret = require("../api/api_key").firebase;
+
+if (!process.env.FIREBASE_SECRET) {
+  var secret = require('../api/api_key').firebase;
+}
 
 var createFirebaseRef = function() {
-  var tokenGenerator = new FirebaseTokenGenerator(secret.secret);
+  var tokenGenerator = new FirebaseTokenGenerator(process.env.FIREBASE_SECRET || secret.secret);
   var token = tokenGenerator.createToken(
       {uid: "custom:1"});
 
@@ -17,7 +20,7 @@ var createFirebaseRef = function() {
     }
   });
   return ref;
-  
+
 }
 
 
