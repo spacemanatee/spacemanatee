@@ -170,3 +170,7 @@ a.favorite:hover {
   margin-left: 5px;
   margin-right: 5px;
 }
+
+#favorites-container {
+  margin-top: 5em;
+}

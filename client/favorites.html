@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" ng-app='app'>
+  <head>
+    <title>Road Trip Advisor</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- favicons -->
+    <link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="images/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="images/favicon-16x16.png" sizes="16x16">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <!-- Optional theme -->
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css"> -->
+
+    <!-- Custom Fonts -->
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster|Rancho|Lato:300,400,700,300italic,400italic,700italic">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="styles/style.css">
+
+
+    <script src="lib/angular/angular.js"></script>
+    <script src="lib/autofill-directive/autofill-directive.js"></script>
+
+    <script src="app/service.js"></script>
+    <script src="app/app.js"></script>
+  </head>
+
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top topnav" role="navigation">
+      <div class="container topnav">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand topnav" href="/"><span class="logo-1">Road Trip</span> <span class="logo-2">Advisor</span></a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav navbar-right">
+            <li>
+              <a href="/#features">About</a>
+            </li>
+            <li>
+              <a href="/login">Favorites</a>
+            </li>
+          </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+      </div>
+      <!-- /.container -->
+    </nav>
+
+    <div ng-controller="favoritesCtrl" id="favorites-container">
+     <div class="container-fluid top-ten-container" ng-if="!!favorites" ng-model="favorites">
+       <div class="row">
+         <div class="col-md-10 col-md-offset-1">
+         </div>
+       </div>
+       <div class="row" ng-repeat="favorite in favorites" ng-class="{'oddTop10': $odd , 'evenTop10': $even}">
+         <div class="col-md-2">
+           <img class="top-content" ng-src='{{favorite["image_url"] ? favorite["image_url"] : "./images/default.jpg"}}' alt="Sites image not yet available"/>
+         </div>
+         <div class="col-md-3">
+           <div class="top-content">
+             <p class="top-name">{{favorite.name}}</p>
+             <p class="top-location">{{favorite.location.city}}, {{favorite.location.state_code}}</p>
+             <img ng-src='{{favorite["rating_img_url"]}}' alt="rating not yet available">
+             <br>
+             <a ng-href='{{favorite["url"]}}' target="_blank"> Visit on Yelp</a>
+           </div>
+         </div>
+         <div class="col-md-7">
+           <div class="top-content">
+             <p class="top-snippet">{{favorite.snippet_text}}</p>
+           </div>
+         </div>
+       </div>
+     </div><!-- container-fluid -->
+   </div>
+
+  </body>
+</html>

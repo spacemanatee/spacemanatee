@@ -1,4 +1,4 @@
-angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
+angular.module('app', ['autofill-directive', 'app.service'])
 .controller('mapCtrl', ['$scope', '$element', 'Maps', 'Favorites', 'Utility', function($scope, $element, Maps, Favorites, Utility) {
   // initialize the user input option selector
   $scope.optionSelections = [
@@ -210,18 +210,52 @@ angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
   };
 }])
 
+.controller('favoritesCtrl', [ '$scope', 'Favorites', '$log', function($scope, Favorites, $log) {
+  // Favorites.getFavorites().then(function(res){
+  //         $log.log(res.data);
+  //         $scope.favorites = res.data;
+  //       });
+  $scope.favorites = Favorites.getFavorites();
+  $log.log($scope.favorites);
+
+}])
+
 .factory('Maps', ['$http', function($http) {
 // sends a POST to the server at route /csearch with all waypoints along route as data
-var sendPost = function(routeObject){
-  return $http.post('/search', routeObject)
-    .then(function(response, error){
-      // POST request successfully sent and response code was returned
-      return response;
-    });
+  var sendPost = function(routeObject){
+    return $http.post('/search', routeObject)
+      .then(function(response, error){
+        // POST request successfully sent and response code was returned
+        return response;
+      });
+    };
+
+  return {
+    sendPost: sendPost
   };
 
-return {
-  sendPost: sendPost
-};
+}])
+
+.factory('Favorites', ['$http', function($http) {
+// sends a POST to the server at route /csearch with all waypoints along route as data
+  var postFavorite = function(bussinessObject){
+    return $http.post('/favorites', bussinessObject)
+      .then(function(response, error){
+        return response;
+      });
+  };
+
+  var getFavorites = function(){
+    // return $http.get('/favorites')
+    //   .then(function(response, error){
+    //     return response;
+    //   });
+    return [{"is_claimed":false,"distance":170.9099000075661,"mobile_url":"http://m.yelp.com/biz/smoke-signals-san-francisco","rating_img_url":"http://s3-media1.fl.yelpassets.com/assets/2/www/img/f1def11e4e79/ico/stars/v1/stars_5.png","review_count":42,"name":"Smoke Signals","snippet_image_url":"http://s3-media4.fl.yelpassets.com/photo/DREJpjmBMUjMNv8dwvSkng/ms.jpg","rating":5,"url":"http://www.yelp.com/biz/smoke-signals-san-francisco","location":{"cross_streets":"Vallejo St & Bonita St","city":"San Francisco","display_address":["2223 Polk St","Russian Hill","San Francisco, CA 94109"],"geo_accuracy":8,"neighborhoods":["Russian Hill"],"postal_code":"94109","country_code":"US","address":["2223 Polk St"],"coordinate":{"latitude":37.7972603,"longitude":-122.4222107},"state_code":"CA"},"phone":"4152926025","snippet_text":"This place has an absolutely fabulous selection of magazines - of all types. The owner is so helpful and respectful too - along with other staff I've come...","image_url":"http://s3-media2.fl.yelpassets.com/bphoto/iVwiEss10z39mvmTbKoqlg/ms.jpg","categories":[["Newspapers & Magazines","mags"],["Food","food"]],"display_phone":"+1-415-292-6025","rating_img_url_large":"http://s3-media3.fl.yelpassets.com/assets/2/www/img/22affc4e6c38/ico/stars/v1/stars_large_5.png","id":"smoke-signals-san-francisco","is_closed":false,"rating_img_url_small":"http://s3-media1.fl.yelpassets.com/assets/2/www/img/c7623205d5cd/ico/stars/v1/stars_small_5.png"}];
+  };
+
+  return {
+    postFavorite: postFavorite,
+    getFavorites: getFavorites
+  };
 
 }]);
