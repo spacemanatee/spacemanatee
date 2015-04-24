@@ -16,6 +16,17 @@ angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
   // initialize the geoCodeNotSuccessful to be used for determining valid continental destination or not
   $scope.geoCodeNotSuccessful = false;
 
+  // geolocation search
+
+  $scope.useCurrentLocation = function(){
+    $('#start').val("Searching for current location...");
+    navigator.geolocation.getCurrentPosition(function(position){
+    $('#start').val([position.coords.latitude, position.coords.longitude]);
+    }, function(){
+    $('#start').val("Error retrieving location.")
+    });
+  };
+
   // save label selection to scope
   $scope.chooseFilter = function(option) {
     $scope.optionFilter = option.value;
