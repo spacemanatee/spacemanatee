@@ -92,7 +92,6 @@ module.exports.searchYelp = function (req, res, googleCoords, distance, callback
 module.exports.createTopResultsJSON = function(yelpResults, distance, limit) {
   limit = limit || 10;
   var allBusinesses = [];
-  var topResults = [];
   var invalidBusinesses = [];
   var invalidLength;
   var remainingBusinesses = [];
@@ -151,22 +150,7 @@ module.exports.createTopResultsJSON = function(yelpResults, distance, limit) {
   return b.rating - a.rating;
   })
 
-  // loop from highest to lowest
-  for (var i = 0 ; i < remainingBusinesses.length ; i++){
-    if (topResults.length < limit){
-      var pushIt = true;
-      // loop through top 10
-      for (var j = 0 ; j < topResults.length ; j++){
-        // if business is not too close to an existing top 10 business, add to top 10
-        if (coord.calcDistance(remainingBusinesses[i], topResults[j]) < (distance / 20) ){
-          pushIt = false;
-        }
-      }
-      if (pushIt === true){
-        topResults.push(remainingBusinesses[i]);
-      }
-    }
-  }
+  var topResults = findTopTen(remainingBusinesses, distance, limit, 20);
 
   // The previous group had two groups, results (which had pin drops) and topTen (which showed in list). We are using our new top 10 for both groups.
   var result = {
@@ -176,6 +160,32 @@ module.exports.createTopResultsJSON = function(yelpResults, distance, limit) {
 
   return result;
 
+};
+
+var findTopTen = function(remainingBusinesses, distance, limit, distDivisor){
+  console.log('FIND TOP 10, DIVISOR: ', distDivisor)
+  var topResults = [];
+  // loop from highest to lowest
+  for (var i = 0 ; i < remainingBusinesses.length ; i++){
+    if (topResults.length < limit){
+      var pushIt = true;
+      // loop through top 10
+      for (var j = 0 ; j < topResults.length ; j++){
+        // if business is not too close to an existing top 10 business, add to top 10
+        if (coord.calcDistance(remainingBusinesses[i], topResults[j]) < (distance / distDivisor) ){
+          pushIt = false;
+        }
+      }
+      if (pushIt === true){
+        topResults.push(remainingBusinesses[i]);
+      }
+    }
+  }
+  console.log('TOP RESULTS LENGTH: ', topResults.length);
+  if (topResults.length < 10){
+    findTopTen(remainingBusinesses, distance, limit, distDivisor+5)
+  }
+  return topResults;
 };
 
 
