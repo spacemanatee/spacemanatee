@@ -23,7 +23,7 @@ angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
     navigator.geolocation.getCurrentPosition(function(position){
     $('#start').val([position.coords.latitude, position.coords.longitude]);
     }, function(){
-    $('#start').val("Error retrieving location.")
+    $('#start').val("Error retrieving location.");
     });
   };
 
@@ -137,13 +137,13 @@ $scope.submit = function(city) {
 
         // remove first and last couple of search queries
         var intervalWaypoints = polyline.GetPointsAtDistance(distanceBetweenQueries*1609.34);
-        console.log(intervalWaypoints)
+        console.log(intervalWaypoints);
         for (var i = 2; i < intervalWaypoints.length - 2; i++) {
           var x = intervalWaypoints[i];
 
-          var obj = x.k+','+x.D
+          var obj = x.k+','+x.D;
           coords.push(obj);
-        };
+        }
 
 
         // objects to be sent to backend
