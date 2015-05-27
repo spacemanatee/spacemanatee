@@ -24,8 +24,8 @@ angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
     var pValid = angular.element("<p id='warningMsg'/>");
     pValid.text("");
     //check to see if the location entered is invalid
-    //if location is invalid, then append invalid message 
-    // else, append a blank message 
+    //if location is invalid, then append invalid message
+    // else, append a blank message
     if (isInvalid) {
       $element.find("main-area").append(pInvalid);
     } else {
@@ -60,7 +60,7 @@ angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
       directionsService.route(request, function(response, status) {
         // successfully get the direction based on locations
         if (status === google.maps.DirectionsStatus.OK) {
-          $scope.geoCodeNotSuccessful=false;  
+          $scope.geoCodeNotSuccessful=false;
           //Update the map on index.html
           directionsDisplay.setDirections(response);
 
@@ -78,7 +78,7 @@ angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
           //gather all points along route returned by Google in overview_path property
           //and insert them into waypoints object to send to server
           for (var j = 0; j < response.routes[0].overview_path.length; j++) {
-            sendData.waypoints[j] = response.routes[0].overview_path[j].k + "," + response.routes[0].overview_path[j].D;
+            sendData.waypoints[j] = response.routes[0].overview_path[j].lat() + "," + response.routes[0].overview_path[j].lng();
           }
 
           console.log("sendData: ", sendData);
