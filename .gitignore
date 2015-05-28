@@ -28,6 +28,6 @@ dist/
 # see https://npmjs.org/doc/faq.html#Should-I-check-my-node_modules-folder-into-git
 node_modules/
 client/lib
-server/api/
+server/api/local_key.js
 server/.DS_Store
 .DS_Store
