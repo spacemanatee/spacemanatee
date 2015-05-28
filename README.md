@@ -22,16 +22,14 @@ Angular, Node/Express
 
 1. Include Yelp API keys (get from Yelp directly):
    ```sh
-   # Create a new file server/api/api_key.js, formatted as:
-   var yelpKey = {
+   # Create a new file server/api/local_key.js, formatted as:
+   module.exports = {
      consumer_key: 'YOUR-KEY',
      consumer_secret: 'YOUR-KEY',
      token: 'YOUR-KEY',
      token_secret:  'YOUR-KEY',
      ssl: true
    };
-
-   module.exports = yelpKey;
    ```
 
 1. Run the following in the project directory:
